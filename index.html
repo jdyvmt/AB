@@ -267,9 +267,9 @@
         return dateObj.toLocaleDateString('nl-BE', opties).toLowerCase();
     }
 
-   async function updateScreen() {
+  async function updateScreen() {
         try {
-            // CACHE BUSTER: We plakken de unieke tijd achter de URL zodat de browser NOOIT oude info laadt
+            // CACHE BUSTER: Zorgt ervoor dat de browser altijd de nieuwste data ophaalt
             const uniqueUrl = `${csvUrl}&t=${new Date().getTime()}`;
             
             const response = await fetch(uniqueUrl);
@@ -310,7 +310,7 @@
                 }
 
                 let pauzeClass = '';
-                if (String(uuid = uur).trim() === "5") {
+                if (String(uur).trim() === "5") {
                     pauzeClass = 'middagpauze-cel';
                 }
 
