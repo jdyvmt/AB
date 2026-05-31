@@ -267,12 +267,9 @@
         return dateObj.toLocaleDateString('nl-BE', opties).toLowerCase();
     }
 
-  async function updateScreen() {
+async function updateScreen() {
         try {
-            // CACHE BUSTER: Zorgt ervoor dat de browser altijd de nieuwste data ophaalt
-            const uniqueUrl = `${csvUrl}&t=${new Date().getTime()}`;
-            
-            const response = await fetch(uniqueUrl);
+            const response = await fetch(csvUrl);
             const rawData = await response.text();
             const rows = rawData.split(/\r?\n/).map(row => splitCSVLine(row));
 
@@ -302,6 +299,7 @@
                 let uur = rows[i][0] ? rows[i][0].replace(/"/g, '').trim() : reserveUur;
                 let klassen = rows[i][1] ? rows[i][1].replace(/"/g, '').trim() : '-';
 
+                // GRADUELE LOGICA: Optimaal gebruik van de nieuw gecreëerde celbreedte
                 let size = 30; 
                 if (klassen.length > 75) {
                     size = 25;
@@ -330,3 +328,12 @@
             console.error("Fout bij inladen data:", err);
         }
     }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        updateScreen();
+        setInterval(updateScreen, 120000);
+    });
+</script>
+
+</body>
+</html>
