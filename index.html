@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Informatiescherm - Geoptimaliseerd HD</title>
+    <title>Afwezige leerkrachten Atheneum Brugge</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
@@ -288,9 +288,9 @@
 
             if(rows[3] && rows[3][1]) {
                 let afwezigenStr = rows[3][1].replace(/"/g, '').trim();
-                afwezigenEl.innerText = afwezigenStr || "Geen geregistreerde afwezigen";
+                afwezigenEl.innerText = afwezigenStr || "Iedereen is er!";
             } else {
-                afwezigenEl.innerText = "Geen geregistreerde afwezigen";
+                afwezigenEl.innerText = "Iedereen is er!";
             }
 
             let tableHtml = '';
@@ -302,11 +302,11 @@
                 // GRADUELE LOGICA: Optimaal gebruik van de nieuw gecreëerde celbreedte
                 let size = 30; 
                 if (klassen.length > 75) {
-                    size = 21;
+                    size = 22;
                 } else if (klassen.length > 55) {
-                    size = 23;
-                } else if (klassen.length > 35) {
                     size = 25;
+                } else if (klassen.length > 35) {
+                    size = 26;
                 } else if (klassen.length > 20) {
                     size = 28;
                 }
