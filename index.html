@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Afwezigen Atheneum Brugge</title>
+    <title>School Informatiescherm - High Contrast HD</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
@@ -61,10 +61,10 @@
             color: #ffffff;
         }
 
-        /* 3. AFWEZIGEN (ROOD ACCENT) */
+        /* 3. AFWEZIGEN */
         .absence-box {
             background: rgba(30, 41, 59, 0.7);
-            border-left: 10px solid #ef4444; /* Rood i.p.v. turkoois */
+            border-left: 10px solid #ef4444;
             padding: 15px 25px;
             border-radius: 12px;
             margin-bottom: 20px;
@@ -72,7 +72,7 @@
         }
 
         .absence-title {
-            color: #ef4444; /* Rood i.p.v. turkoois */
+            color: #ef4444;
             font-family: 'Poppins', sans-serif;
             font-weight: 700;
             font-size: 20px;
@@ -90,13 +90,13 @@
             line-height: 1.2;
         }
 
-        /* 4. PLANNER: GEOPTIMALISEERDE TABEL */
+        /* 4. PLANNER: HIGH CONTRAST TABEL */
         .table-container {
             flex-grow: 1;
-            background: rgba(255, 255, 255, 0.02);
+            background: #131e35; /* Iets lichtere basiskleur voor de tabel */
             border-radius: 12px;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 2px solid rgba(60, 156, 168, 0.3); /* Turkooise buitenrand */
             display: flex;
             flex-direction: column;
         }
@@ -109,34 +109,46 @@
         }
 
         th {
-            background-color: rgba(60, 156, 168, 0.15);
+            background-color: #1e293b;
             color: #3c9ca8;
             text-align: left;
             padding: 12px 25px;
             font-family: 'Poppins', sans-serif;
-            font-size: 22px;
+            font-size: 24px;
             text-transform: uppercase;
-            border-bottom: 3px solid #3c9ca8;
-            height: 50px;
+            border-bottom: 4px solid #3c9ca8;
+            height: 60px;
         }
 
         td {
             padding: 0 25px;
-            font-size: 34px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 36px; /* Nog iets groter voor betere leesbaarheid */
+            border-bottom: 2px solid rgba(60, 156, 168, 0.15); /* Duidelijke scheidingslijn */
             vertical-align: middle;
             text-align: left;
+        }
+
+        /* Zebra-lijnen: Elke even rij krijgt een duidelijke turkoois-blauwe gloed achtergrond */
+        tr:nth-child(even) {
+            background-color: rgba(60, 156, 168, 0.08);
+        }
+
+        /* Oneven rijen krijgen een diepere contrastkleur */
+        tr:nth-child(odd) {
+            background-color: #0f172a;
         }
 
         .hour-col {
             width: 140px;
             font-weight: 700;
             color: #3c9ca8;
+            border-right: 2px solid rgba(60, 156, 168, 0.2); /* Verticale lijn tussen Uur en Klassen */
         }
 
         .class-col {
             font-weight: 600;
             color: #ffffff;
+            padding-left: 40px; /* Meer afstand vanaf de verticale lijn */
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -144,10 +156,6 @@
 
         tr:last-child td {
             border-bottom: none;
-        }
-
-        tr:nth-child(even) {
-            background-color: rgba(255, 255, 255, 0.01);
         }
 
         /* 5. FOOTER */
@@ -187,7 +195,7 @@
             <thead>
                 <tr>
                     <th class="hour-col">Uur</th>
-                    <th class="class-col">Klassen</th>
+                    <th class="class-col" style="padding-left: 40px;">Klassen</th>
                 </tr>
             </thead>
             <tbody id="tabel-body">
@@ -253,7 +261,6 @@
                 return;
             }
 
-            // 1. Datum (Volledig in kleine letters)
             if(rows[1] && rows[1][1]) {
                 const schoneDatum = rows[1][1].replace(/"/g, '').trim();
                 datumEl.innerText = formatToDutchDate(schoneDatum);
@@ -261,7 +268,6 @@
                 datumEl.innerText = "geen datum opgegeven";
             }
 
-            // 2. Afwezigen (Behoudt originele hoofdletters uit de Sheet!)
             if(rows[3] && rows[3][1]) {
                 let afwezigenStr = rows[3][1].replace(/"/g, '').trim();
                 afwezigenEl.innerText = afwezigenStr || "Geen geregistreerde afwezigen";
@@ -269,7 +275,6 @@
                 afwezigenEl.innerText = "Geen geregistreerde afwezigen";
             }
 
-            // 3. Tabel (Uren 1 t/m 8)
             let tableHtml = '';
             for (let i = 6; i <= 13; i++) {
                 if (!rows[i] || rows[i].length < 2) {
