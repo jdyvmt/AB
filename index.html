@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Informatiescherm - Perfect Contrast HD</title>
+    <title>School Informatiescherm - Matrix HD</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        /* 1. FULL SCREEN & ULTRA-GUARANTEED GRADIENT */
+        /* 1. FULL SCREEN SETUP & BACKGROUND */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -17,8 +17,7 @@
         }
 
         html, body {
-            /* Waterdichte fix voor het kleurverloop: dekkend over het volledige tv-scherm */
-            background: #090d16 linear-gradient(135deg, #162c41 0%, #090d16 100%) no-repeat fixed !important;
+            background: #090d16 linear-gradient(135deg, #14283b 0%, #090d16 100%) no-repeat fixed !important;
             color: #f8fafc;
             font-family: 'Lato', sans-serif;
             height: 100vh;
@@ -93,7 +92,7 @@
             line-height: 1.2;
         }
 
-        /* 4. PLANNER: HIGH CONTRAST MATRIX */
+        /* 4. PLANNER: MATRIX TIMETABLE */
         .table-container {
             flex-grow: 1;
             background: rgba(15, 23, 42, 0.3);
@@ -112,21 +111,22 @@
             table-layout: fixed;
         }
 
+        /* VASTE GROOTTE VOOR TITELS */
         th {
             background-color: rgba(9, 13, 22, 0.7);
-            color: #3c9ca8;
+            color: #3c9ca8 !important;
             text-align: left;
             padding: 10px 25px;
             font-family: 'Poppins', sans-serif;
-            font-size: 18px;
+            font-size: 22px; /* Altijd stabiele, grotere titel */
             text-transform: uppercase;
             border-bottom: 3px solid #3c9ca8;
-            height: 45px;
+            height: 50px;
         }
 
         td {
             padding: 0 25px;
-            border-bottom: 2px solid rgba(60, 156, 168, 0.15);
+            border-bottom: 2px solid rgba(60, 156, 168, 0.12);
             vertical-align: middle;
             text-align: left;
             line-height: 1.2;
@@ -140,12 +140,13 @@
             background-color: rgba(9, 13, 22, 0.2);
         }
 
-        /* OPGELOST: Uren in krachtig wit voor maximale leesbaarheid vanaf afstand */
+        /* RECHTTREKKING UUR-KOLOM: Iets compacter en perfect matchend turkoois */
         .hour-col {
-            width: 120px;
+            width: 130px;
             font-weight: 700;
-            color: #ffffff !important; 
-            font-size: 32px;
+            color: #3c9ca8 !important; 
+            font-size: 26px; /* Blijft nu strak binnen de lijn */
+            text-shadow: 0 0 10px rgba(60, 156, 168, 0.2);
             border-right: 2px solid rgba(60, 156, 168, 0.25);
         }
 
@@ -153,9 +154,13 @@
             font-weight: 600;
             color: #ffffff;
             padding-left: 30px;
-            width: 100%; /* Gebruikt de volledige breedte van de cel */
             white-space: normal; 
             word-wrap: break-word;
+        }
+
+        /* WHITEOUT MIDDAGPAUZE: Harde witte lijn onder lesuur 5 (rij index 4 in de tbody) */
+        tr.middagpauze-grens td {
+            border-bottom: 4px solid #ffffff !important;
         }
 
         tr:last-child td {
@@ -198,7 +203,7 @@
         <table>
             <thead>
                 <tr>
-                    <th class="hour-col" style="color: #3c9ca8 !important;">Uur</th>
+                    <th class="hour-col">Uur</th>
                     <th class="class-col" style="padding-left: 30px;">Klassen</th>
                 </tr>
             </thead>
@@ -293,21 +298,11 @@
 
             let tableHtml = '';
             for (let i = 6; i <= 13; i++) {
-                if (!rows[i] || rows[i].length < 2) {
-                    const reserveUur = i - 5;
-                    tableHtml += `
-                        <tr>
-                            <td class="hour-col">${reserveUur}</td>
-                            <td class="class-col" style="font-size: 32px;">-</td>
-                        </tr>
-                    `;
-                    continue;
-                }
-                
-                const uur = rows[i][0] ? rows[i][0].replace(/"/g, '').trim() : (i - 5);
-                const klassen = rows[i][1] ? rows[i][1].replace(/"/g, '').trim() : '-';
+                const reserveUur = i - 5;
+                let uur = rows[i][0] ? rows[i][0].replace(/"/g, '').trim() : reserveUur;
+                let klassen = rows[i][1] ? rows[i][1].replace(/"/g, '').trim() : '-';
 
-                // OPGELOST: Basisgrootte is groot (32px), krimpt gradueel pas bij veel tekst
+                // Bepaal de dynamische grootte voor extreem lange teksten
                 let size = 32; 
                 if (klassen.length > 60) {
                     size = 18;
@@ -317,8 +312,14 @@
                     size = 26;
                 }
 
+                // Voeg de specifieke klasse toe voor de middagpauze-grens onder uur 5
+                let rowClass = '';
+                if (uur == "5") {
+                    rowClass = 'class="middagpauze-grens"';
+                }
+
                 tableHtml += `
-                    <tr>
+                    <tr ${rowClass}>
                         <td class="hour-col">${uur}</td>
                         <td class="class-col" style="font-size: ${size}px;">${klassen || '-'}</td>
                     </tr>
