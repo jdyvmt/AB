@@ -3,22 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Informatiescherm - Auto Wrap HD</title>
+    <title>School Informatiescherm - Perfect Contrast HD</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        /* 1. FULL SCREEN & SOFT BACKGROUND */
+        /* 1. FULL SCREEN & ULTRA-GUARANTEED GRADIENT */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
-        body, html {
-            /* Warme, zachtere petroleum/marine verloop */
-            background: radial-gradient(circle at top right, #14283b 0%, #090d16 100%) !important;
+        html, body {
+            /* Waterdichte fix voor het kleurverloop: dekkend over het volledige tv-scherm */
+            background: #090d16 linear-gradient(135deg, #162c41 0%, #090d16 100%) no-repeat fixed !important;
             color: #f8fafc;
             font-family: 'Lato', sans-serif;
             height: 100vh;
@@ -64,12 +64,14 @@
 
         /* 3. AFWEZIGEN */
         .absence-box {
-            background: rgba(22, 32, 51, 0.8);
+            background: rgba(15, 23, 42, 0.5);
             border-left: 8px solid #ef4444;
             padding: 12px 25px;
             border-radius: 12px;
             margin-bottom: 15px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            border-left: 8px solid #ef4444;
         }
 
         .absence-title {
@@ -91,16 +93,16 @@
             line-height: 1.2;
         }
 
-        /* 4. PLANNER: ALTIJD VOLLEDIGE TEKST */
+        /* 4. PLANNER: HIGH CONTRAST MATRIX */
         .table-container {
             flex-grow: 1;
-            background: rgba(19, 30, 53, 0.7);
+            background: rgba(15, 23, 42, 0.3);
             border-radius: 12px;
             overflow: hidden;
-            border: 2px solid rgba(60, 156, 168, 0.25);
+            border: 2px solid rgba(60, 156, 168, 0.3);
             display: flex;
             flex-direction: column;
-            box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.25);
         }
 
         table {
@@ -111,7 +113,7 @@
         }
 
         th {
-            background-color: rgba(15, 23, 42, 0.6);
+            background-color: rgba(9, 13, 22, 0.7);
             color: #3c9ca8;
             text-align: left;
             padding: 10px 25px;
@@ -123,36 +125,35 @@
         }
 
         td {
-            padding: 8px 25px;
-            /* Iets compacter basisformaat, schaalt mee bij veel tekst */
-            font-size: 26px; 
-            border-bottom: 2px solid rgba(60, 156, 168, 0.12);
+            padding: 0 25px;
+            border-bottom: 2px solid rgba(60, 156, 168, 0.15);
             vertical-align: middle;
             text-align: left;
             line-height: 1.2;
         }
 
         tr:nth-child(even) {
-            background-color: rgba(60, 156, 168, 0.05);
+            background-color: rgba(60, 156, 168, 0.04);
         }
 
         tr:nth-child(odd) {
-            background-color: rgba(15, 23, 42, 0.3);
+            background-color: rgba(9, 13, 22, 0.2);
         }
 
+        /* OPGELOST: Uren in krachtig wit voor maximale leesbaarheid vanaf afstand */
         .hour-col {
             width: 120px;
             font-weight: 700;
-            color: #3c9ca8;
-            border-right: 2px solid rgba(60, 156, 168, 0.15);
-            font-size: 26px;
+            color: #ffffff !important; 
+            font-size: 32px;
+            border-right: 2px solid rgba(60, 156, 168, 0.25);
         }
 
         .class-col {
             font-weight: 600;
             color: #ffffff;
             padding-left: 30px;
-            /* GEEN BELETSELTEKEN MEER: Tekst mag breken en wrap-around gebruiken */
+            width: 100%; /* Gebruikt de volledige breedte van de cel */
             white-space: normal; 
             word-wrap: break-word;
         }
@@ -168,7 +169,7 @@
             align-items: center;
             gap: 10px;
             font-size: 13px;
-            color: #64748b;
+            color: #4b5563;
             font-family: 'Poppins', sans-serif;
             padding-top: 5px;
         }
@@ -197,7 +198,7 @@
         <table>
             <thead>
                 <tr>
-                    <th class="hour-col">Uur</th>
+                    <th class="hour-col" style="color: #3c9ca8 !important;">Uur</th>
                     <th class="class-col" style="padding-left: 30px;">Klassen</th>
                 </tr>
             </thead>
@@ -297,7 +298,7 @@
                     tableHtml += `
                         <tr>
                             <td class="hour-col">${reserveUur}</td>
-                            <td class="class-col">-</td>
+                            <td class="class-col" style="font-size: 32px;">-</td>
                         </tr>
                     `;
                     continue;
@@ -306,18 +307,20 @@
                 const uur = rows[i][0] ? rows[i][0].replace(/"/g, '').trim() : (i - 5);
                 const klassen = rows[i][1] ? rows[i][1].replace(/"/g, '').trim() : '-';
 
-                // Berekent automatisch kleinere letters als de cel extreem lang is (> 35 tekens)
-                let fontSizeStyle = '';
-                if (klassen.length > 50) {
-                    fontSizeStyle = 'font-size: 16px;';
-                } else if (klassen.length > 25) {
-                    fontSizeStyle = 'font-size: 20px;';
+                // OPGELOST: Basisgrootte is groot (32px), krimpt gradueel pas bij veel tekst
+                let size = 32; 
+                if (klassen.length > 60) {
+                    size = 18;
+                } else if (klassen.length > 40) {
+                    size = 22;
+                } else if (klassen.length > 20) {
+                    size = 26;
                 }
 
                 tableHtml += `
                     <tr>
                         <td class="hour-col">${uur}</td>
-                        <td class="class-col" style="${fontSizeStyle}">${klassen || '-'}</td>
+                        <td class="class-col" style="font-size: ${size}px;">${klassen || '-'}</td>
                     </tr>
                 `;
             }
