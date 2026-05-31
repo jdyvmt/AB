@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Informatiescherm - Turkoois Design</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* 1. FUNDAMENTELE SETUP */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #0f172a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        /* Vaste afmetingen voor TV-output (Raspberry Pi) */
+        .slide-container {
+            width: 1280px;
+            height: 720px;
+            background-color: #0f172a;
+            background-image: linear-gradient(rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.9));
+            background-size: cover;
+            background-position: center;
+            color: #f8fafc;
+            font-family: 'Lato', sans-serif;
+            padding: 50px 60px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            border: 1px solid #1e293b;
+        }
+
+        /* 2. BOVENSTE SECTIE: DATUM */
+        .header-section {
+            z-index: 1;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .date-badge {
+            background: #3c9ca8; /* Gevraagde Turkoois kleur */
+            color: white;
+            padding: 12px 30px;
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 26px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            box-shadow: 0 4px 15px rgba(60, 156, 168, 0.3);
+        }
+
+        #live-datum {
+            font-family: 'Poppins', sans-serif;
+            font-size: 48px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        /* 3. MIDDELSTE SECTIE: AFWEZIGEN */
+        .absence-box {
+            z-index: 1;
+            background: rgba(30, 41, 59, 0.6);
+            border-left: 10px solid #3c9ca8; /* Turkoois accent */
+            padding: 25px 35px;
+            border-radius: 15px;
+            margin-bottom: 35px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+        }
+
+        .absence-title {
+            color: #3c9ca8; /* Turkoois tekst */
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 20px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        #live-afwezigen {
+            font-size: 36px;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.2;
+        }
+
+        /* 4. ONDERSTE SECTIE: PLANNER (TABEL) */
+        .table-container {
+            z-index: 1;
+            flex-grow: 1;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        th {
+            background-color: rgba(60, 156, 168, 0.15); /* Subtiel turkoois */
+            color: #3c9ca8;
+            text-align: left; /* Volledig links uitgelijnd */
+            padding: 18px 30px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-bottom: 3px solid #3c9ca8;
+        }
+
+        td {
+            padding: 16px 30px;
+            font-size: 28px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            vertical-align: middle;
+            text-align: left; /* Volledig links uitgelijnd */
+        }
+
+        .hour-col {
+            width: 180px;
+            font-weight: 700;
+            color: #3c9ca8;
+        }
+
+        .class-col {
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.01);
+        }
+
+        /* 5. FOOTER INFO */
+        .footer-info {
+            position: absolute;
+            bottom: 25px;
+            right: 60px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 16px;
+            color: #94a3b8;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .footer-info i {
+            color: #3c9ca8;
+        }
+    </style>
+</head>
+<body>
+
+<div class="slide-container">
+    <div class="header-section">
+        <div class="date-badge">Datum</div>
+        <div id="live-datum">Bezig met laden...</div>
+    </div>
+
+    <div class="absence-box">
+        <div class="absence-title">
+            <i class="fa-solid fa-user-slash"></i> Afwezige leerkrachten
+        </div>
+        <div id="live-afwezigen">Gegevens ophalen...</div>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th class="hour-col">Uur</th>
+                    <th class="class-col">Klassen</th>
+                </tr>
+            </thead>
+            <tbody id="tabel-body">
+                </tbody>
+        </table>
+    </div>
+
+    <div class="footer-info">
+        <i class="fa-solid fa-sync"></i>
+        <span>Laatste update: <span id="update-time">--:--</span></span>
+    </div>
+</div>
+
+<script>
+    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSvnc7njfJTFzjePjpse17li2YOorDQ_j20h5rFfE8cMfsPo5L_DXdGjNBGvTki-Mq_uqYQFdRScgeW/pub?output=csv';
+
+    // Splitst CSV-regels correct op, zelfs als er komma's tussen aanhalingstekens staan
+    function splitCSVLine(line) {
+        const result = [];
+        let current = '';
+        let inQuotes = false;
+
+        for (let i = 0; i < line.length; i++) {
+            const char = line[i];
+            if (char === '"') {
+                inQuotes = !inQuotes;
+            } else if (char === ',' && !inQuotes) {
+                result.push(current);
+                current = '';
+            } else {
+                current += char;
+            }
+        }
+        result.push(current);
+        return result;
+    }
+
+    async function updateScreen() {
+        try {
+            const response = await fetch(csvUrl);
+            const rawData = await response.text();
+            
+            // Rekening houden met verborgen Carriage Returns (\r) uit Excel/Sheets
+            const rows = rawData.split(/\r?\n/).map(row => splitCSVLine(row));
+
+            const datumEl = document.getElementById('live-datum');
+            const afwezigenEl = document.getElementById('live-afwezigen');
+            const tabelEl = document.getElementById('tabel-body');
+            const updateEl = document.getElementById('update-time');
+
+            if (!datumEl || !afwezigenEl || !tabelEl || !updateEl) {
+                setTimeout(updateScreen, 1000);
+                return;
+            }
+
+            // 1. Datum (Rij 2, Kolom B)
+            if(rows[1] && rows[1][1]) {
+                datumEl.innerText = rows[1][1].replace(/"/g, '').trim();
+            } else {
+                datumEl.innerText = "Geen datum opgegeven";
+            }
+
+            // 2. Afwezigen (Rij 4, Kolom B)
+            if(rows[3] && rows[3][1]) {
+                let afwezigenStr = rows[3][1].replace(/"/g, '').trim();
+                afwezigenEl.innerText = afwezigenStr || "Geen geregistreerde afwezigen";
+            } else {
+                afwezigenEl.innerText = "Geen geregistreerde afwezigen";
+            }
+
+            // 3. Tabel (Rij 7 t/m 14)
+            let tableHtml = '';
+            for (let i = 6; i <= 13; i++) {
+                if (!rows[i] || rows[i].length < 2) {
+                    const reserveUur = i - 5;
+                    tableHtml += `
+                        <tr>
+                            <td class="hour-col">${reserveUur}</td>
+                            <td class="class-col">-</td>
+                        </tr>
+                    `;
+                    continue;
+                }
+                
+                const uur = rows[i][0] ? rows[i][0].replace(/"/g, '').trim() : (i - 5);
+                const klassen = rows[i][1] ? rows[i][1].replace(/"/g, '').trim() : '-';
+
+                tableHtml += `
+                    <tr>
+                        <td class="hour-col">${uur}</td>
+                        <td class="class-col">${klassen || '-'}</td>
+                    </tr>
+                `;
+            }
+            tabelEl.innerHTML = tableHtml;
+
+            const now = new Date();
+            updateEl.innerText = now.toLocaleTimeString('nl-BE', {hour: '2-digit', minute:'2-digit'});
+
+        } catch (err) {
+            console.error("Fout bij inladen data:", err);
+            const afwezigenEl = document.getElementById('live-afwezigen');
+            if(afwezigenEl) afwezigenEl.innerText = "Verbindingsfout met Google Sheets.";
+        }
+    }
+
+    // Pas starten als de HTML-structuur volledig klaarstaat
+    document.addEventListener("DOMContentLoaded", function() {
+        updateScreen();
+        setInterval(updateScreen, 120000); // Elke 2 minuten verversen
+    });
+</script>
+
+</body>
+</html>
