@@ -92,13 +92,13 @@
             line-height: 1.2;
         }
 
-        /* 4. PLANNER: MATRIX TIMETABLE */
+        /* 4. PLANNER: MATRIX TIMETABLE WITH FIXED WIDTHS */
         .table-container {
             flex-grow: 1;
-            background: rgba(30, 41, 59, 0.65); /* Iets lichter voor beter contrast */
+            background: rgba(30, 41, 59, 0.65);
             border-radius: 12px;
             overflow: hidden;
-            border: 2px solid rgba(94, 234, 212, 0.4); /* Feller turkoois */
+            border: 2px solid rgba(94, 234, 212, 0.4);
             display: flex;
             flex-direction: column;
             box-shadow: 0 12px 40px rgba(0,0,0,0.3);
@@ -108,13 +108,12 @@
             width: 100%;
             height: 100%;
             border-collapse: collapse;
-            table-layout: fixed;
+            table-layout: fixed; /* Dwingt de browser om exact de opgegeven percentages te gebruiken */
         }
 
-        /* FIX: UUR EN KLASSEN TITELS EXACT IDENTIEK */
         th {
             background-color: #111827;
-            color: #5eead4 !important; /* Ultra helder turkoois */
+            color: #5eead4 !important;
             text-align: left;
             padding: 12px 25px;
             font-family: 'Poppins', sans-serif !important;
@@ -133,7 +132,6 @@
             line-height: 1.2;
         }
 
-        /* Subtiel rij-contrast */
         tr:nth-child(even) {
             background-color: rgba(255, 255, 255, 0.02);
         }
@@ -142,17 +140,18 @@
             background-color: rgba(0, 0, 0, 0.1);
         }
 
-        /* RECHTTREKKING LEESBAARHEID UREN */
+        /* STRIPTE EN FIXTE BREEDTE EN ALIGNEMENT */
         .hour-col {
-            width: 140px;
+            width: 15% !important; /* Vaste compacte breedte voor het uur */
             font-family: 'Poppins', sans-serif;
             font-weight: 700;
-            color: #5eead4 !important; /* Ultra helder turkoois voor de uren */
+            color: #5eead4 !important;
             font-size: 28px;
             border-right: 2px solid rgba(94, 234, 212, 0.3);
         }
 
         .class-col {
+            width: 85% !important; /* Maximale breedte voor de klassen over de rest van de tv */
             font-weight: 600;
             color: #ffffff;
             padding-left: 35px;
@@ -160,7 +159,6 @@
             word-wrap: break-word;
         }
 
-        /* FIX: Gecorrigerde pauze-lijn op celniveau */
         .middagpauze-cel {
             border-bottom: 5px solid #ffffff !important;
         }
@@ -205,8 +203,8 @@
         <table>
             <thead>
                 <tr>
-                    <th style="width: 140px;">Uur</th>
-                    <th>Klassen</th>
+                    <th class="hour-col">Uur</th>
+                    <th class="class-col">Klassen</th>
                 </tr>
             </thead>
             <tbody id="tabel-body">
@@ -301,7 +299,7 @@
                 let uur = rows[i][0] ? rows[i][0].replace(/"/g, '').trim() : reserveUur;
                 let klassen = rows[i][1] ? rows[i][1].replace(/"/g, '').trim() : '-';
 
-                // GRADUELE VERKLEINING: Begint groot, krimpt heel rustig pas bij veel tekst
+                // GRADUELE LOGICA: Optimaal gebruik van de nieuw gecreëerde celbreedte
                 let size = 30; 
                 if (klassen.length > 75) {
                     size = 21;
@@ -313,7 +311,6 @@
                     size = 28;
                 }
 
-                // FIX: Voeg de middagpauze-klasse toe aan de cellen als het uur 5 is
                 let pauzeClass = '';
                 if (String(uur).trim() === "5") {
                     pauzeClass = 'middagpauze-cel';
