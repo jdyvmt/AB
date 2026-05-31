@@ -26,7 +26,7 @@
             margin: 0;
         }
 
-        /* Vaste afmetingen voor TV-output (Raspberry Pi) */
+        /* Geoptimaliseerd voor volledige schermvulling en grotere tekst */
         .slide-container {
             width: 1280px;
             height: 720px;
@@ -36,7 +36,7 @@
             background-position: center;
             color: #f8fafc;
             font-family: 'Lato', sans-serif;
-            padding: 50px 60px;
+            padding: 40px 50px;
             display: flex;
             flex-direction: column;
             position: relative;
@@ -46,20 +46,20 @@
         /* 2. BOVENSTE SECTIE: DATUM */
         .header-section {
             z-index: 1;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
             gap: 25px;
         }
 
         .date-badge {
-            background: #3c9ca8; /* Gevraagde Turkoois kleur */
+            background: #3c9ca8;
             color: white;
-            padding: 12px 30px;
+            padding: 10px 25px;
             border-radius: 12px;
             font-family: 'Poppins', sans-serif;
             font-weight: 700;
-            font-size: 26px;
+            font-size: 24px;
             text-transform: uppercase;
             letter-spacing: 1.5px;
             box-shadow: 0 4px 15px rgba(60, 156, 168, 0.3);
@@ -67,37 +67,38 @@
 
         #live-datum {
             font-family: 'Poppins', sans-serif;
-            font-size: 48px;
+            font-size: 52px; /* Iets groter */
             font-weight: 600;
             color: #ffffff;
+            text-transform: capitalize; /* Zorgt voor een hoofdletter bij de dagnaam */
         }
 
         /* 3. MIDDELSTE SECTIE: AFWEZIGEN */
         .absence-box {
             z-index: 1;
             background: rgba(30, 41, 59, 0.6);
-            border-left: 10px solid #3c9ca8; /* Turkoois accent */
-            padding: 25px 35px;
+            border-left: 10px solid #3c9ca8;
+            padding: 20px 30px;
             border-radius: 15px;
-            margin-bottom: 35px;
+            margin-bottom: 25px;
             backdrop-filter: blur(12px);
             box-shadow: 0 12px 40px rgba(0,0,0,0.4);
         }
 
         .absence-title {
-            color: #3c9ca8; /* Turkoois tekst */
+            color: #3c9ca8;
             font-family: 'Poppins', sans-serif;
             font-weight: 700;
-            font-size: 20px;
+            font-size: 22px; /* Groter */
             text-transform: uppercase;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
             gap: 12px;
         }
 
         #live-afwezigen {
-            font-size: 36px;
+            font-size: 38px; /* Groter */
             font-weight: 700;
             color: #ffffff;
             line-height: 1.2;
@@ -111,6 +112,7 @@
             border-radius: 20px;
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.08);
+            max-height: 400px; /* Zorgt dat de tabel binnen het TV-scherm blijft */
         }
 
         table {
@@ -120,27 +122,27 @@
         }
 
         th {
-            background-color: rgba(60, 156, 168, 0.15); /* Subtiel turkoois */
+            background-color: rgba(60, 156, 168, 0.15);
             color: #3c9ca8;
-            text-align: left; /* Volledig links uitgelijnd */
-            padding: 18px 30px;
+            text-align: left;
+            padding: 12px 25px; /* Compactere padding voor meer rijen */
             font-family: 'Poppins', sans-serif;
-            font-size: 20px;
+            font-size: 22px; /* Groter */
             text-transform: uppercase;
             letter-spacing: 1.5px;
             border-bottom: 3px solid #3c9ca8;
         }
 
         td {
-            padding: 16px 30px;
-            font-size: 28px;
+            padding: 10px 25px; /* Compactere padding zodat alle 8 uren passen */
+            font-size: 30px; /* Letters flink groter voor leesbaarheid op afstand */
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             vertical-align: middle;
-            text-align: left; /* Volledig links uitgelijnd */
+            text-align: left;
         }
 
         .hour-col {
-            width: 180px;
+            width: 150px;
             font-weight: 700;
             color: #3c9ca8;
         }
@@ -148,6 +150,9 @@
         .class-col {
             font-weight: 600;
             color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         tr:last-child td {
@@ -161,8 +166,8 @@
         /* 5. FOOTER INFO */
         .footer-info {
             position: absolute;
-            bottom: 25px;
-            right: 60px;
+            bottom: 15px;
+            right: 50px;
             display: flex;
             align-items: center;
             gap: 12px;
@@ -213,7 +218,6 @@
 <script>
     const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSvnc7njfJTFzjePjpse17li2YOorDQ_j20h5rFfE8cMfsPo5L_DXdGjNBGvTki-Mq_uqYQFdRScgeW/pub?output=csv';
 
-    // Splitst CSV-regels correct op, zelfs als er komma's tussen aanhalingstekens staan
     function splitCSVLine(line) {
         const result = [];
         let current = '';
@@ -234,12 +238,27 @@
         return result;
     }
 
+    // Zet een datumtekst om naar een voluit geschreven Nederlandse datum
+    function formatToDutchDate(dateStr) {
+        if (!dateStr) return "Geen datum opgegeven";
+        
+        // Probeer de tekst om te zetten naar een echte datum
+        const parsedDate = Date.parse(dateStr) || Date.parse(dateStr.split('-').reverse().join('-'));
+        
+        if (isNaN(parsedDate)) {
+            // Als het geen geldige datum is, tonen we gewoon de tekst uit de cel
+            return dateStr;
+        }
+
+        const dateObj = new Date(parsedDate);
+        const opties = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+        return dateObj.toLocaleDateString('nl-BE', opties);
+    }
+
     async function updateScreen() {
         try {
             const response = await fetch(csvUrl);
             const rawData = await response.text();
-            
-            // Rekening houden met verborgen Carriage Returns (\r) uit Excel/Sheets
             const rows = rawData.split(/\r?\n/).map(row => splitCSVLine(row));
 
             const datumEl = document.getElementById('live-datum');
@@ -252,14 +271,15 @@
                 return;
             }
 
-            // 1. Datum (Rij 2, Kolom B)
+            // 1. Datum uitlezen en omzetten naar voluit Nederlands
             if(rows[1] && rows[1][1]) {
-                datumEl.innerText = rows[1][1].replace(/"/g, '').trim();
+                const schoneDatum = rows[1][1].replace(/"/g, '').trim();
+                datumEl.innerText = formatToDutchDate(schoneDatum);
             } else {
                 datumEl.innerText = "Geen datum opgegeven";
             }
 
-            // 2. Afwezigen (Rij 4, Kolom B)
+            // 2. Afwezigen
             if(rows[3] && rows[3][1]) {
                 let afwezigenStr = rows[3][1].replace(/"/g, '').trim();
                 afwezigenEl.innerText = afwezigenStr || "Geen geregistreerde afwezigen";
@@ -267,7 +287,7 @@
                 afwezigenEl.innerText = "Geen geregistreerde afwezigen";
             }
 
-            // 3. Tabel (Rij 7 t/m 14)
+            // 3. Tabel (Toont gegarandeerd alle 8 lesuren)
             let tableHtml = '';
             for (let i = 6; i <= 13; i++) {
                 if (!rows[i] || rows[i].length < 2) {
@@ -303,10 +323,9 @@
         }
     }
 
-    // Pas starten als de HTML-structuur volledig klaarstaat
     document.addEventListener("DOMContentLoaded", function() {
         updateScreen();
-        setInterval(updateScreen, 120000); // Elke 2 minuten verversen
+        setInterval(updateScreen, 120000);
     });
 </script>
 
