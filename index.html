@@ -170,7 +170,7 @@
         /* 5. FOOTER */
         .footer-info {
             display: flex;
-            justify-content: flex-end;
+            justify-content: flex-start;
             align-items: center;
             gap: 10px;
             font-size: 13px;
@@ -302,8 +302,6 @@ async function updateScreen() {
                 // GRADUELE LOGICA: Optimaal gebruik van de nieuw gecreëerde celbreedte
                 let size = 30; 
                 if (klassen.length > 75) {
-                    size = 25;
-                } else if (klassen.length > 55) {
                     size = 28;
                 }
 
