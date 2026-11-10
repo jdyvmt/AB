@@ -227,7 +227,7 @@
 
 <div class="slide-container">
     <div class="header-section">
-        <div class="date-badge">Datum</div>
+        <div id="date-badge" class="date-badge">Datum</div>
         <div id="live-datum">Even geduld...</div>
     </div>
 
@@ -284,12 +284,13 @@
         return result;
     }
 
-    function formatToDutchDate(dateStr) {
-        if (!dateStr) return "geen datum opgegeven";
+    // Parsed de datum uit de Sheet (bv. "12/11/2026" of "2026-11-12")
+    function parseSheetDate(dateStr) {
+        if (!dateStr) return null;
         const cleanStr = dateStr.replace(/"/g, '').trim();
         const parts = cleanStr.split(/[-/]/);
-        let dateObj;
-        
+        let dateObj = null;
+
         if (parts.length === 3) {
             if (parts[0].length <= 2 && parts[2].length === 4) {
                 dateObj = new Date(parts[2], parts[1] - 1, parts[0]);
@@ -302,12 +303,32 @@
             dateObj = new Date(Date.parse(cleanStr));
         }
 
-        if (isNaN(dateObj.getTime())) {
-            return cleanStr.toLowerCase();
-        }
+        return (dateObj && !isNaN(dateObj.getTime())) ? dateObj : null;
+    }
 
+    // Formatteert de datum naar een volwaardige Nederlandse datumstring met weekdag
+    function formatToDutchDate(dateObj) {
+        if (!dateObj) return "geen datum opgegeven";
         const opties = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
         return dateObj.toLocaleDateString('nl-BE', opties).toLowerCase();
+    }
+
+    // Berekent de adaptieve label-tekst (VANDAAG, MORGEN, GISTEREN, BINNEN X DAGEN, X DAGEN GELEDEN)
+    function calculateRelativeDateLabel(targetDate) {
+        if (!targetDate) return "DATUM";
+
+        const today = new Date();
+        const todayReset = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+        const targetReset = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate());
+
+        const diffTime = targetReset.getTime() - todayReset.getTime();
+        const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+
+        if (diffDays === 0) return "VANDAAG";
+        if (diffDays === 1) return "MORGEN";
+        if (diffDays === -1) return "GISTEREN";
+        if (diffDays > 1) return `BINNEN ${diffDays} DAGEN`;
+        return `${Math.abs(diffDays)} DAGEN GELEDEN`;
     }
 
     function parseTimeToMinutes(timeStr) {
@@ -333,21 +354,31 @@
             const rawData = await response.text();
             const rows = rawData.split(/\r?\n/).map(row => splitCSVLine(row));
 
+            const badgeEl = document.getElementById('date-badge');
             const datumEl = document.getElementById('live-datum');
             const afwezigenEl = document.getElementById('live-afwezigen');
             const tabelEl = document.getElementById('tabel-body');
             const updateEl = document.getElementById('update-time');
 
-            if (!datumEl || !afwezigenEl || !tabelEl || updateEl === null) return;
+            if (!badgeEl || !datumEl || !afwezigenEl || !tabelEl || updateEl === null) return;
 
+            // Datum verwerken vanuit cel B2 van de Google Sheet
             const rawDatum = rows[1]?.[1];
-            datumEl.innerText = rawDatum ? formatToDutchDate(rawDatum) : "geen datum opgegeven";
+            const parsedDate = parseSheetDate(rawDatum);
 
+            datumEl.innerText = formatToDutchDate(parsedDate);
+            badgeEl.innerText = calculateRelativeDateLabel(parsedDate);
+
+            // Afwezigen uitlezen
             const rawAfwezigen = rows[3]?.[1]?.replace(/"/g, '').trim();
             afwezigenEl.innerText = rawAfwezigen || "Joepie! Geen afwezigen!";
 
             const now = new Date();
             const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+            // Vergelijk actuele lesuren alleen als de datum in de sheet wel degelijk vandaag is
+            const todayReset = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const isSheetToday = parsedDate && (new Date(parsedDate.getFullYear(), parsedDate.getMonth(), parsedDate.getDate()).getTime() === todayReset.getTime());
 
             let parsedRows = [];
             for (let i = 6; i <= 13; i++) {
@@ -372,7 +403,8 @@
                     endMins = startMins !== null ? startMins + 50 : 9999;
                 }
 
-                let isActive = (startMins !== null && currentMinutes >= startMins && currentMinutes < endMins);
+                // Alleen oplichten als de datum van de sheet ook effectief VANDAAG is
+                let isActive = isSheetToday && (startMins !== null && currentMinutes >= startMins && currentMinutes < endMins);
 
                 let sizeCss = 'font-size: min(2.8vh, 1.8vw);'; 
                 if (currentRow.klassen.length > 100) sizeCss = 'font-size: min(2.1vh, 1.3vw);';
