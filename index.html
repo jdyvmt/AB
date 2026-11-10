@@ -167,16 +167,17 @@
     <script>
         const csvBaseUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSvnc7njfJTFzjePjpse17li2YOorDQ_j20h5rFfE8cMfsPo5L_DXdGjNBGvTki-Mq_uqYQFdRScgeW/pub?output=csv';
 
+        // Uurrooster aangepast: Middagpauze valt na het 5de uur (van 12:55 tot 14:00)
         const defaultSchedule = [
-            { hour: 1, label: "1ste uur", timeStr: "08:30 - 09:20", startMin: 510, endMin: 560 },
-            { hour: 2, label: "2de uur",  timeStr: "09:20 - 10:10", startMin: 560, endMin: 610 },
-            { hour: 3, label: "3de uur",  timeStr: "10:25 - 11:15", startMin: 625, endMin: 675 },
-            { hour: 4, label: "4de uur",  timeStr: "11:15 - 12:05", startMin: 675, endMin: 725 },
-            { isPause: true, label: "MIDDAGPAUZE", timeStr: "12:05 - 13:00", startMin: 725, endMin: 780 },
-            { hour: 5, label: "5de uur",  timeStr: "13:00 - 13:50", startMin: 780, endMin: 830 },
-            { hour: 6, label: "6de uur",  timeStr: "13:50 - 14:40", startMin: 830, endMin: 880 },
-            { hour: 7, label: "7de uur",  timeStr: "14:50 - 15:40", startMin: 890, endMin: 940 },
-            { hour: 8, label: "8ste uur", timeStr: "15:40 - 16:30", startMin: 940, endMin: 990 }
+            { hour: 1, label: "1ste uur", startMin: 510, endMin: 560 },  // 08:30 - 09:20
+            { hour: 2, label: "2de uur",  startMin: 560, endMin: 610 },  // 09:20 - 10:10
+            { hour: 3, label: "3de uur",  startMin: 625, endMin: 675 },  // 10:25 - 11:15
+            { hour: 4, label: "4de uur",  startMin: 675, endMin: 725 },  // 11:15 - 12:05
+            { hour: 5, label: "5de uur",  startMin: 725, endMin: 775 },  // 12:05 - 12:55
+            { isPause: true, label: "MIDDAGPAUZE", startMin: 775, endMin: 840 }, // 12:55 - 14:00
+            { hour: 6, label: "6de uur",  startMin: 840, endMin: 890 },  // 14:00 - 14:50
+            { hour: 7, label: "7de uur",  startMin: 890, endMin: 940 },  // 14:50 - 15:40
+            { hour: 8, label: "8ste uur", startMin: 940, endMin: 990 }   // 15:40 - 16:30
         ];
 
         function splitCSVLine(line) {
