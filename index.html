@@ -132,11 +132,11 @@
         <div class="glass-panel rounded-2xl flex-1 flex flex-col overflow-hidden border border-slate-700/50 shadow-2xl min-h-0">
             <!-- Table Header -->
             <div class="grid grid-cols-12 bg-slate-900/90 border-b border-teal-500/30 px-6 py-2.5 text-xs font-extrabold text-brand-teal uppercase tracking-wider flex-shrink-0">
-                <div class="col-span-3 flex items-center gap-2">
-                    <i class="fa-solid fa-hourglass-half"></i> Uur / Tijd
+                <div class="col-span-2 flex items-center gap-2">
+                    <i class="fa-solid fa-hourglass-half"></i> Lesuur
                 </div>
-                <div class="col-span-9 flex items-center gap-2">
-                    <i class="fa-solid fa-graduation-cap"></i> Betrokken Klassen & Lokaal / Opvang
+                <div class="col-span-10 flex items-center gap-2">
+                    <i class="fa-solid fa-graduation-cap"></i> Klassen
                 </div>
             </div>
 
@@ -198,7 +198,6 @@
             return result;
         }
 
-        // Zet de datumtekst uit Cel B2 om naar een echt Date object
         function parseSheetDate(dateStr) {
             if (!dateStr) return null;
             const cleanStr = dateStr.replace(/"/g, '').trim();
@@ -220,7 +219,6 @@
             return (dateObj && !isNaN(dateObj.getTime())) ? dateObj : null;
         }
 
-        // Bereken VANDAAG / MORGEN / GISTEREN / BINNEN X DAGEN / X DAGEN GELEDEN
         function calculateRelativeDateLabel(targetDate) {
             if (!targetDate) return "DATUM";
             const today = new Date();
@@ -256,7 +254,6 @@
                     rows = rawData.split(/\r?\n/).map(row => splitCSVLine(row));
                 }
 
-                // Datum en Relatief label uit Sheet (Cel B2)
                 const rawDatum = rows[1]?.[1];
                 const parsedDate = parseSheetDate(rawDatum);
                 const now = new Date();
@@ -270,7 +267,6 @@
                     document.getElementById('live-dag-label').textContent = "ONBEKEND";
                 }
 
-                // Afwezigen uitlezen & altijd witte tekstkleur garanderen
                 const rawAfwezigen = rows[3]?.[1]?.replace(/"/g, '').trim();
                 const afwezigenEl = document.getElementById('afwezigen-tekst');
                 
@@ -285,8 +281,6 @@
 
                 const currentMinutes = now.getHours() * 60 + now.getMinutes();
                 const todayReset = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-                
-                // Belangrijk: lesuur-highlighting mag enkel actief zijn als de Sheet effectief de datum van VANDAAG heeft
                 const isSheetToday = parsedDate && (new Date(parsedDate.getFullYear(), parsedDate.getMonth(), parsedDate.getDate()).getTime() === todayReset.getTime());
 
                 const container = document.getElementById('rooster-container');
@@ -296,11 +290,11 @@
                     if (item.isPause) {
                         html += `
                             <div class="grid grid-cols-12 bg-slate-950/80 border-y border-teal-500/20 px-6 py-2 items-center flex-1">
-                                <div class="col-span-3 font-extrabold text-amber-400 text-xs lg:text-sm tracking-wider flex items-center gap-2">
-                                    <i class="fa-solid fa-utensils"></i> PAUZE (${item.timeStr})
+                                <div class="col-span-2 font-extrabold text-amber-400 text-xs lg:text-sm tracking-wider flex items-center gap-2">
+                                    <i class="fa-solid fa-utensils"></i> MIDDAGPAUZE
                                 </div>
-                                <div class="col-span-9 text-xs font-bold text-slate-400 uppercase tracking-widest">
-                                    Middagpauze - Herneem lessen om 13:00u
+                                <div class="col-span-10 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                                    -
                                 </div>
                             </div>
                         `;
@@ -323,14 +317,14 @@
 
                     html += `
                         <div class="grid grid-cols-12 px-6 py-2 items-center flex-1 ${rowClass}">
-                            <div class="col-span-3 flex items-center gap-3">
+                            <div class="col-span-2 flex items-center gap-3">
                                 <span class="w-7 h-7 lg:w-8 lg:h-8 rounded-lg ${isActive ? 'bg-teal-400 text-slate-950 font-black' : 'bg-slate-800 text-teal-400 font-bold'} flex items-center justify-center text-xs lg:text-sm shadow">
                                     ${item.hour}
                                 </span>
                                 <span class="font-extrabold text-white text-sm lg:text-base">${hourTimeFromSheet}</span>
                             </div>
 
-                            <div class="col-span-9 font-bold text-white tracking-wide ${fontSizeClass}">
+                            <div class="col-span-10 font-bold text-white tracking-wide ${fontSizeClass}">
                                 ${klassenTekst !== '-' ? klassenTekst : '<span class="text-slate-600 font-normal italic">Geen vervangingen / studie gemeld</span>'}
                             </div>
                         </div>
@@ -360,3 +354,4 @@
     </script>
 </body>
 </html>
+```[cite: 4]
