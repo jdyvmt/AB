@@ -107,7 +107,7 @@
             width: 100%;
             height: 100%;
             border-collapse: collapse;
-            table-layout: fixed; /* Dwingt de browser om exact de opgegeven percentages te gebruiken */
+            table-layout: fixed;
         }
 
         th {
@@ -139,9 +139,10 @@
             background-color: rgba(0, 0, 0, 0.1);
         }
 
-        /* HIGHLIGHTING ACTUELE LESUUR */
+        /* HIGHLIGHTING ACTUELE LESUUR (Duidelijk opvallend) */
         tr.active-hour {
-            background-color: rgba(94, 234, 212, 0.15) !important;
+            background-color: rgba(94, 234, 212, 0.2) !important;
+            border-left: 6px solid #5eead4;
         }
 
         tr.active-hour td.hour-col {
@@ -149,19 +150,18 @@
             background-color: #3c9ca8;
         }
 
-        /* STRIPTE EN FIXTE BREEDTE EN ALIGNEMENT */
         .hour-col {
-            width: 10% !important; /* Vaste compacte breedte voor het uur */
+            width: 15% !important; /* Wat breder gemaakt zodat tijdstippen als 8.30u mooi passen */
             font-family: 'Poppins', sans-serif;
             font-weight: 700;
             color: #5eead4 !important;
-            font-size: 26px;
+            font-size: 24px;
             border-right: 2px solid rgba(94, 234, 212, 0.3);
             text-align: center;
         }
 
         .class-col {
-            width: 90% !important; /* Maximale breedte voor de klassen over de rest van de tv */
+            width: 85% !important;
             font-weight: 600;
             color: #ffffff;
             padding-left: 35px;
@@ -211,21 +211,21 @@
 <div class="slide-container">
     <div class="header-section">
         <div class="date-badge">Datum</div>
-        <div id="live-datum">Secondje...</div>
+        <div id="live-datum">Even geduld...</div>
     </div>
 
     <div class="absence-box">
         <div class="absence-title">
             <i class="fa-solid fa-user-slash"></i> Afwezige leerkrachten
         </div>
-        <div id="live-afwezigen">Efkes checken...</div>
+        <div id="live-afwezigen">Gegevens ophalen...</div>
     </div>
 
     <div class="table-container">
         <table>
             <thead>
                 <tr>
-                    <th class="hour-col" style="text-align: center;">Uur</th>
+                    <th class="hour-col" style="text-align: center;">Uur / Tijd</th>
                     <th class="class-col">Klassen</th>
                 </tr>
             </thead>
@@ -293,26 +293,25 @@
         return dateObj.toLocaleDateString('nl-BE', opties).toLowerCase();
     }
 
-    // Bepaal het huidige lesuur op basis van de klok (aanpasbaar indien nodig)
-    function getCurrentLessonHour() {
-        const now = new Date();
-        const minutes = now.getHours() * 60 + now.getMinutes();
-
-        if (minutes >= 510 && minutes < 560) return 1;  // 08:30 - 09:20
-        if (minutes >= 560 && minutes < 610) return 2;  // 09:20 - 10:10
-        if (minutes >= 625 && minutes < 675) return 3;  // 10:25 - 11:15
-        if (minutes >= 675 && minutes < 725) return 4;  // 11:15 - 12:05
-        if (minutes >= 780 && minutes < 830) return 5;  // 13:00 - 13:50
-        if (minutes >= 830 && minutes < 880) return 6;  // 13:50 - 14:40
-        if (minutes >= 890 && minutes < 940) return 7;  // 14:50 - 15:40
-        if (minutes >= 940 && minutes < 990) return 8;  // 15:40 - 16:30
+    // Zet een tijdstring zoals "8.30u" of "8:30" om naar totaal aantal minuten vanaf middernacht
+    function parseTimeToMinutes(timeStr) {
+        if (!timeStr) return null;
+        const clean = timeStr.replace(/["u]/g, '').trim().replace('.', ':');
+        const parts = clean.split(':');
+        if (parts.length >= 2) {
+            const hours = parseInt(parts[0], 10);
+            const minutes = parseInt(parts[1], 10);
+            if (!isNaN(hours) && !isNaN(minutes)) {
+                return hours * 60 + minutes;
+            }
+        }
         return null;
     }
 
     async function updateScreen() {
         const statusDot = document.getElementById('status-dot');
         try {
-            // Cache-busting toegevoegd via een unieke timestampparameter
+            // Cache-busting toegevoegd
             const response = await fetch(`${csvBaseUrl}&t=${Date.now()}`);
             if (!response.ok) throw new Error("Netwerkfout");
 
@@ -326,46 +325,60 @@
 
             if (!datumEl || !afwezigenEl || !tabelEl || updateEl === null) return;
 
-            // Veilige datalezing via optional chaining en null-coalescing
             const rawDatum = rows[1]?.[1];
             datumEl.innerText = rawDatum ? formatToDutchDate(rawDatum) : "geen datum opgegeven";
 
             const rawAfwezigen = rows[3]?.[1]?.replace(/"/g, '').trim();
             afwezigenEl.innerText = rawAfwezigen || "Joepie! Geen afwezigen!";
 
-            const currentHour = getCurrentLessonHour();
-            let tableHtml = '';
+            // Huidige tijd in minuten om vergelijking te maken
+            const now = new Date();
+            const currentMinutes = now.getHours() * 60 + now.getMinutes();
 
+            // We parsen eerst alle rijen zodat we de starttijden kennen voor de highlighting
+            let parsedRows = [];
             for (let i = 6; i <= 13; i++) {
-                const reserveUur = i - 5;
-                let uur = rows[i]?.[0] ? rows[i][0].replace(/"/g, '').trim() : reserveUur;
+                let uurStr = rows[i]?.[0] ? rows[i][0].replace(/"/g, '').trim() : '';
                 let klassen = rows[i]?.[1] ? rows[i][1].replace(/"/g, '').trim() : '-';
-
-                // Dynamische tekstgrootte (Auto-scaling / Tekstniveaus)
-                let size = 28; 
-                if (klassen.length > 100) {
-                    size = 20;
-                } else if (klassen.length > 60) {
-                    size = 24;
+                let startMins = parseTimeToMinutes(uurStr);
+                
+                if (uurStr) {
+                    parsedRows.push({ uurStr, klassen, startMins });
                 }
+            }
+
+            let tableHtml = '';
+            for (let index = 0; index < parsedRows.length; index++) {
+                const currentRow = parsedRows[index];
+                const nextRow = parsedRows[index + 1];
+
+                let startMins = currentRow.startMins;
+                // Als er een volgend uur is, loopt dit lesuur tot de start van het volgende uur. Anders rekenen we 50 minuten.
+                let endMins = nextRow && nextRow.startMins !== null ? nextRow.startMins : (startMins !== null ? startMins + 50 : 9999);
+
+                // Check of de huidige kloktijd binnen dit lesuur valt
+                let isActive = (startMins !== null && currentMinutes >= startMins && currentMinutes < endMins);
+
+                // Dynamische tekstgrootte op basis van lengte
+                let size = 28; 
+                if (currentRow.klassen.length > 100) size = 20;
+                else if (currentRow.klassen.length > 60) size = 24;
 
                 let pauzeClass = '';
-                if (String(uur).trim() === "4" || String(uur).trim() === "5") {
+                // Optioneel: middagpauze detectie op basis van tijdstip (bijv. rond 12u/13u)
+                if (currentRow.uurStr.includes("12.") || currentRow.uurStr.includes("13.")) {
                     pauzeClass = 'middagpauze-cel';
                 }
 
-                let activeClass = (parseInt(uur) === currentHour) ? 'active-hour' : '';
-
                 tableHtml += `
-                    <tr class="${activeClass}">
-                        <td class="hour-col ${pauzeClass}">${uur}</td>
-                        <td class="class-col ${pauzeClass}" style="font-size: ${size}px;">${klassen || '-'}</td>
+                    <tr class="${isActive ? 'active-hour' : ''}">
+                        <td class="hour-col ${pauzeClass}">${currentRow.uurStr}</td>
+                        <td class="class-col ${pauzeClass}" style="font-size: ${size}px;">${currentRow.klassen || '-'}</td>
                     </tr>
                 `;
             }
             tabelEl.innerHTML = tableHtml;
 
-            const now = new Date();
             updateEl.innerText = now.toLocaleTimeString('nl-BE', {hour: '2-digit', minute:'2-digit'});
             if (statusDot) statusDot.classList.remove('offline');
 
