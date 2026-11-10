@@ -167,7 +167,6 @@
     <script>
         const csvBaseUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSvnc7njfJTFzjePjpse17li2YOorDQ_j20h5rFfE8cMfsPo5L_DXdGjNBGvTki-Mq_uqYQFdRScgeW/pub?output=csv';
 
-        // Uurrooster aangepast: Middagpauze valt na het 5de uur (van 12:55 tot 14:00)
         const defaultSchedule = [
             { hour: 1, label: "1ste uur", startMin: 510, endMin: 560 },  // 08:30 - 09:20
             { hour: 2, label: "2de uur",  startMin: 560, endMin: 610 },  // 09:20 - 10:10
@@ -295,7 +294,6 @@
                                     <i class="fa-solid fa-utensils"></i> MIDDAGPAUZE
                                 </div>
                                 <div class="col-span-10 text-xs font-bold text-slate-400 uppercase tracking-widest">
-                                    -
                                 </div>
                             </div>
                         `;
@@ -322,7 +320,7 @@
                                 <span class="w-7 h-7 lg:w-8 lg:h-8 rounded-lg ${isActive ? 'bg-teal-400 text-slate-950 font-black' : 'bg-slate-800 text-teal-400 font-bold'} flex items-center justify-center text-xs lg:text-sm shadow">
                                     ${item.hour}
                                 </span>
-                                <span class="font-extrabold text-white text-sm lg:text-base">${hourTimeFromSheet}</span>
+                                <span class="font-extrabold text-white text-sm lg:text-base whitespace-nowrap">${hourTimeFromSheet}</span>
                             </div>
 
                             <div class="col-span-10 font-bold text-white tracking-wide ${fontSizeClass}">
@@ -355,4 +353,3 @@
     </script>
 </body>
 </html>
-```[cite: 4]
