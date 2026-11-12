@@ -45,40 +45,33 @@
         }
     </script>
     <style>
-        /* Custom TV screen optimizations */
         html, body {
             height: 100vh;
             width: 100vw;
             overflow: hidden;
         }
-
         body {
             background: radial-gradient(circle at 15% 15%, #1e293b 0%, #0f172a 70%, #090d16 100%);
             color: #f8fafc;
             user-select: none;
         }
-
         .glass-panel {
             background: rgba(30, 41, 59, 0.7);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
-
         .glass-panel-active {
             background: linear-gradient(135deg, rgba(15, 118, 110, 0.35) 0%, rgba(30, 41, 59, 0.9) 100%);
             border: 2px solid #5eead4 !important;
         }
-
         .glass-badge {
             background: rgba(244, 63, 94, 0.15);
             border: 1px solid rgba(244, 63, 94, 0.3);
         }
-
         .text-glow {
             text-shadow: 0 0 16px rgba(94, 234, 212, 0.4);
         }
-
         .text-glow-orange {
             text-shadow: 0 0 16px rgba(244, 63, 94, 0.4);
         }
@@ -88,7 +81,6 @@
 
     <!-- TOP HEADER -->
     <header class="flex justify-between items-center glass-panel rounded-2xl px-6 py-3 shadow-2xl flex-shrink-0">
-        <!-- Logo Icon & Datum Links -->
         <div class="flex items-center gap-6">
             <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-teal-500 to-sky-400 flex items-center justify-center font-extrabold text-xl text-slate-950 shadow-lg shadow-teal-500/20">
                 AB
@@ -98,8 +90,6 @@
                 <div class="text-lg lg:text-xl font-bold text-slate-100" id="live-datum-str">Even geduld...</div>
             </div>
         </div>
-
-        <!-- Tijd Rechts -->
         <div class="flex items-center gap-3">
             <i class="fa-regular fa-clock text-2xl text-brand-teal"></i>
             <div class="font-mono text-3xl lg:text-4xl font-extrabold tracking-tight text-white text-glow" id="digital-clock">
@@ -108,10 +98,8 @@
         </div>
     </header>
 
-    <!-- MIDDLE SECTION: AFWEZIGEN BANNER + LESROOSTER GRID -->
+    <!-- MIDDLE SECTION -->
     <main class="flex-1 flex flex-col gap-3 min-h-0">
-        
-        <!-- Afwezige Leerkrachten Card -->
         <div class="glass-panel rounded-2xl p-4 border-l-8 border-l-rose-500 shadow-xl relative overflow-hidden flex-shrink-0">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-4">
@@ -128,9 +116,7 @@
             </div>
         </div>
 
-        <!-- Timetable Table / Cards Container (Adaptief & Schermvullend) -->
         <div class="glass-panel rounded-2xl flex-1 flex flex-col overflow-hidden border border-slate-700/50 shadow-2xl min-h-0">
-            <!-- Table Header -->
             <div class="grid grid-cols-12 bg-slate-900/90 border-b border-teal-500/30 px-6 py-2.5 text-xs font-extrabold text-brand-teal uppercase tracking-wider flex-shrink-0">
                 <div class="col-span-2 flex items-center gap-2">
                     <i class="fa-solid fa-hourglass-half"></i> Lesuur
@@ -139,15 +125,12 @@
                     <i class="fa-solid fa-graduation-cap"></i> Klassen
                 </div>
             </div>
-
-            <!-- Table Body / Adaptieve Rijen Container -->
             <div class="flex-1 flex flex-col justify-between divide-y divide-slate-800/60 overflow-hidden" id="rooster-container">
-                <!-- Dynamisch gevuld via JS -->
             </div>
         </div>
     </main>
 
-    <!-- FOOTER: STATUS & TICKER -->
+    <!-- FOOTER -->
     <footer class="glass-panel rounded-2xl px-6 py-2.5 flex justify-between items-center text-xs font-medium text-slate-400 flex-shrink-0">
         <div class="flex items-center gap-6">
             <div class="flex items-center gap-2">
@@ -165,26 +148,26 @@
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
-        const csvBaseUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSvnc7njfJTFzjePjpse17li2YOorDQ_j20h5rFfE8cMfsPo5L_DXdGjNBGvTki-Mq_uqYQFdRScgeW/pub?output=csv';
+        var csvBaseUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSvnc7njfJTFzjePjpse17li2YOorDQ_j20h5rFfE8cMfsPo5L_DXdGjNBGvTki-Mq_uqYQFdRScgeW/pub?output=csv';
 
-        const defaultSchedule = [
-            { hour: 1, label: "1ste uur", startMin: 510, endMin: 560 },  // 08:30 - 09:20
-            { hour: 2, label: "2de uur",  startMin: 560, endMin: 610 },  // 09:20 - 10:10
-            { hour: 3, label: "3de uur",  startMin: 625, endMin: 675 },  // 10:25 - 11:15
-            { hour: 4, label: "4de uur",  startMin: 675, endMin: 725 },  // 11:15 - 12:05
-            { hour: 5, label: "5de uur",  startMin: 725, endMin: 775 },  // 12:05 - 12:55
-            { isPause: true, label: "MIDDAGPAUZE", startMin: 775, endMin: 840 }, // 12:55 - 14:00
-            { hour: 6, label: "6de uur",  startMin: 840, endMin: 890 },  // 14:00 - 14:50
-            { hour: 7, label: "7de uur",  startMin: 890, endMin: 940 },  // 14:50 - 15:40
-            { hour: 8, label: "8ste uur", startMin: 940, endMin: 990 }   // 15:40 - 16:30
+        var defaultSchedule = [
+            { hour: 1, label: "1ste uur", startMin: 510, endMin: 560 },
+            { hour: 2, label: "2de uur",  startMin: 560, endMin: 610 },
+            { hour: 3, label: "3de uur",  startMin: 625, endMin: 675 },
+            { hour: 4, label: "4de uur",  startMin: 675, endMin: 725 },
+            { hour: 5, label: "5de uur",  startMin: 725, endMin: 775 },
+            { isPause: true, label: "MIDDAGPAUZE", startMin: 775, endMin: 840 },
+            { hour: 6, label: "6de uur",  startMin: 840, endMin: 890 },
+            { hour: 7, label: "7de uur",  startMin: 890, endMin: 940 },
+            { hour: 8, label: "8ste uur", startMin: 940, endMin: 990 }
         ];
 
         function splitCSVLine(line) {
-            const result = [];
-            let current = '';
-            let inQuotes = false;
-            for (let i = 0; i < line.length; i++) {
-                const char = line[i];
+            var result = [];
+            var current = '';
+            var inQuotes = false;
+            for (var i = 0; i < line.length; i++) {
+                var char = line[i];
                 if (char === '"') {
                     inQuotes = !inQuotes;
                 } else if (char === ',' && !inQuotes) {
@@ -200,9 +183,9 @@
 
         function parseSheetDate(dateStr) {
             if (!dateStr) return null;
-            const cleanStr = dateStr.replace(/"/g, '').trim();
-            const parts = cleanStr.split(/[-/]/);
-            let dateObj = null;
+            var cleanStr = dateStr.replace(/"/g, '').trim();
+            var parts = cleanStr.split(/[-/]/);
+            var dateObj = null;
 
             if (parts.length === 3) {
                 if (parts[0].length <= 2 && parts[2].length === 4) {
@@ -221,131 +204,131 @@
 
         function calculateRelativeDateLabel(targetDate) {
             if (!targetDate) return "DATUM";
-            const today = new Date();
-            const todayReset = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-            const targetReset = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate());
+            var today = new Date();
+            var todayReset = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+            var targetReset = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate());
 
-            const diffTime = targetReset.getTime() - todayReset.getTime();
-            const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+            var diffTime = targetReset.getTime() - todayReset.getTime();
+            var diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
 
             if (diffDays === 0) return "VANDAAG";
             if (diffDays === 1) return "MORGEN";
             if (diffDays === -1) return "GISTEREN";
-            if (diffDays > 1) return `BINNEN ${diffDays} DAGEN`;
-            return `${Math.abs(diffDays)} DAGEN GELEDEN`;
+            if (diffDays > 1) return "BINNEN " + diffDays + " DAGEN";
+            return Math.abs(diffDays) + " DAGEN GELEDEN";
         }
 
         function updateClock() {
-            const now = new Date();
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
+            var now = new Date();
+            var hours = String(now.getHours()).padStart(2, '0');
+            var minutes = String(now.getMinutes()).padStart(2, '0');
+            var seconds = String(now.getSeconds()).padStart(2, '0');
 
-            document.getElementById('digital-clock').childNodes[0].nodeValue = `${hours}:${minutes}`;
-            document.getElementById('digital-clock-seconds').textContent = `:${seconds}`;
+            document.getElementById('digital-clock').childNodes[0].nodeValue = hours + ':' + minutes;
+            document.getElementById('digital-clock-seconds').textContent = ':' + seconds;
         }
 
-        async function updateScreen() {
-            try {
-                const response = await fetch(`${csvBaseUrl}&t=${Date.now()}`);
-                let rows = [];
-                if (response.ok) {
-                    const rawData = await response.text();
-                    rows = rawData.split(/\r?\n/).map(row => splitCSVLine(row));
-                }
+        function updateScreen() {
+            fetch(csvBaseUrl + '&t=' + Date.now())
+                .then(function(response) {
+                    if (response.ok) {
+                        return response.text();
+                    }
+                    throw new Error('Netwerkfout');
+                })
+                .then(function(rawData) {
+                    var rows = rawData.split(/\r?\n/).map(function(row) {
+                        return splitCSVLine(row);
+                    });
 
-                const rawDatum = (rows[1] && rows[1][1]) ? rows[1][1] : null;
-                const parsedDate = parseSheetDate(rawDatum);
-                const now = new Date();
+                    var rawDatum = (rows[1] && rows[1][1]) ? rows[1][1] : null;
+                    var parsedDate = parseSheetDate(rawDatum);
+                    var now = new Date();
 
-                if (parsedDate) {
-                    const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
-                    document.getElementById('live-datum-str').textContent = parsedDate.toLocaleDateString('nl-BE', options);
-                    document.getElementById('live-dag-label').textContent = calculateRelativeDateLabel(parsedDate);
-                } else {
-                    document.getElementById('live-datum-str').textContent = "Geen datum opgegeven";
-                    document.getElementById('live-dag-label').textContent = "ONBEKEND";
-                }
-
-                const afwezigenRow = (rows[3] && rows[3][1]) ? rows[3][1] : '';
-                const rawAfwezigen = afwezigenRow.replace(/"/g, '').trim();
-                const afwezigenEl = document.getElementById('afwezigen-tekst');
-                
-                afwezigenEl.classList.remove('text-emerald-400');
-                afwezigenEl.classList.add('text-white');
-
-                if (rawAfwezigen && rawAfwezigen !== "") {
-                    afwezigenEl.textContent = rawAfwezigen;
-                } else {
-                    afwezigenEl.textContent = "Geen afwezigen gemeld vandaag!";
-                }
-
-                const currentMinutes = now.getHours() * 60 + now.getMinutes();
-                const todayReset = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-                const isSheetToday = parsedDate && (new Date(parsedDate.getFullYear(), parsedDate.getMonth(), parsedDate.getDate()).getTime() === todayReset.getTime());
-
-                const container = document.getElementById('rooster-container');
-                let html = '';
-
-                defaultSchedule.forEach((item) => {
-                    if (item.isPause) {
-                        html += `
-                            <div class="grid grid-cols-12 bg-slate-950/80 border-y border-teal-500/20 px-6 py-2 items-center flex-1">
-                                <div class="col-span-2 font-extrabold text-amber-400 text-xs lg:text-sm tracking-wider flex items-center gap-2">
-                                    <i class="fa-solid fa-utensils"></i> MIDDAGPAUZE
-                                </div>
-                                <div class="col-span-10 text-xs font-bold text-slate-400 uppercase tracking-widest">
-                                </div>
-                            </div>
-                        `;
-                        return;
+                    if (parsedDate) {
+                        var options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+                        document.getElementById('live-datum-str').textContent = parsedDate.toLocaleDateString('nl-BE', options);
+                        document.getElementById('live-dag-label').textContent = calculateRelativeDateLabel(parsedDate);
+                    } else {
+                        document.getElementById('live-datum-str').textContent = "Geen datum opgegeven";
+                        document.getElementById('live-dag-label').textContent = "ONBEKEND";
                     }
 
-                    const sheetRowIndex = 5 + item.hour;
-                    const sheetRow = rows[sheetRowIndex] || [];
-                    let hourTimeFromSheet = sheetRow[0] ? sheetRow[0].replace(/"/g, '').trim() : item.label;
-                    let klassenTekst = sheetRow[1] ? sheetRow[1].replace(/"/g, '').trim() : '-';
+                    var rawAfwezigen = (rows[3] && rows[3][1]) ? rows[3][1].replace(/"/g, '').trim() : '';
+                    var afwezigenEl = document.getElementById('afwezigen-tekst');
+                    
+                    afwezigenEl.classList.remove('text-emerald-400');
+                    afwezigenEl.classList.add('text-white');
 
-                    let isActive = isSheetToday && (currentMinutes >= item.startMin && currentMinutes < item.endMin);
+                    if (rawAfwezigen && rawAfwezigen !== "") {
+                        afwezigenEl.textContent = rawAfwezigen;
+                    } else {
+                        afwezigenEl.textContent = "Geen afwezigen gemeld vandaag!";
+                    }
 
-                    let fontSizeClass = "text-lg lg:text-xl";
-                    if (klassenTekst.length > 90) fontSizeClass = "text-xs lg:text-sm";
-                    else if (klassenTekst.length > 50) fontSizeClass = "text-sm lg:text-base";
+                    var currentMinutes = now.getHours() * 60 + now.getMinutes();
+                    var todayReset = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                    var isSheetToday = parsedDate && (new Date(parsedDate.getFullYear(), parsedDate.getMonth(), parsedDate.getDate()).getTime() === todayReset.getTime());
 
-                    const rowClass = isActive 
-                        ? 'glass-panel-active animate-pulse-glow relative z-10 rounded-xl my-0.5' 
-                        : 'hover:bg-slate-800/40 transition-colors';
+                    var container = document.getElementById('rooster-container');
+                    var html = '';
 
-                    html += `
-                        <div class="grid grid-cols-12 px-6 py-2 items-center flex-1 ${rowClass}">
-                            <div class="col-span-2 flex items-center gap-3">
-                                <span class="w-7 h-7 lg:w-8 lg:h-8 rounded-lg ${isActive ? 'bg-teal-400 text-slate-950 font-black' : 'bg-slate-800 text-teal-400 font-bold'} flex items-center justify-center text-xs lg:text-sm shadow">
-                                    ${item.hour}
-                                </span>
-                                <span class="font-extrabold text-white text-sm lg:text-base whitespace-nowrap">${hourTimeFromSheet}</span>
-                            </div>
+                    defaultSchedule.forEach(function(item) {
+                        if (item.isPause) {
+                            html += 
+                                '<div class="grid grid-cols-12 bg-slate-950/80 border-y border-teal-500/20 px-6 py-2 items-center flex-1">' +
+                                    '<div class="col-span-2 font-extrabold text-amber-400 text-xs lg:text-sm tracking-wider flex items-center gap-2">' +
+                                        '<i class="fa-solid fa-utensils"></i> MIDDAGPAUZE' +
+                                    '</div>' +
+                                    '<div class="col-span-10 text-xs font-bold text-slate-400 uppercase tracking-widest">' +
+                                    '</div>' +
+                                '</div>';
+                            return;
+                        }
 
-                            <div class="col-span-10 font-bold text-white tracking-wide ${fontSizeClass}">
-                                ${klassenTekst !== '-' ? klassenTekst : '<span class="text-slate-600 font-normal italic">Geen vervangingen / studie gemeld</span>'}
-                            </div>
-                        </div>
-                    `;
+                        var sheetRowIndex = 5 + item.hour;
+                        var sheetRow = rows[sheetRowIndex] || [];
+                        var hourTimeFromSheet = (sheetRow[0]) ? sheetRow[0].replace(/"/g, '').trim() : item.label;
+                        var klassenTekst = (sheetRow[1]) ? sheetRow[1].replace(/"/g, '').trim() : '-';
+
+                        var isActive = isSheetToday && (currentMinutes >= item.startMin && currentMinutes < item.endMin);
+
+                        var fontSizeClass = "text-lg lg:text-xl";
+                        if (klassenTekst.length > 90) fontSizeClass = "text-xs lg:text-sm";
+                        else if (klassenTekst.length > 50) fontSizeClass = "text-sm lg:text-base";
+
+                        var rowClass = isActive 
+                            ? 'glass-panel-active animate-pulse-glow relative z-10 rounded-xl my-0.5' 
+                            : 'hover:bg-slate-800/40 transition-colors';
+
+                        html += 
+                            '<div class="grid grid-cols-12 px-6 py-2 items-center flex-1 ' + rowClass + '">' +
+                                '<div class="col-span-2 flex items-center gap-3">' +
+                                    '<span class="w-7 h-7 lg:w-8 lg:h-8 rounded-lg ' + (isActive ? 'bg-teal-400 text-slate-950 font-black' : 'bg-slate-800 text-teal-400 font-bold') + ' flex items-center justify-center text-xs lg:text-sm shadow">' +
+                                        item.hour +
+                                    '</span>' +
+                                    '<span class="font-extrabold text-white text-sm lg:text-base whitespace-nowrap">' + hourTimeFromSheet + '</span>' +
+                                '</div>' +
+                                '<div class="col-span-10 font-bold text-white tracking-wide ' + fontSizeClass + '">' +
+                                    (klassenTekst !== '-' ? klassenTekst : '<span class="text-slate-600 font-normal italic">Geen vervangingen / studie gemeld</span>') +
+                                '</div>' +
+                            '</div>';
+                    });
+
+                    container.innerHTML = html;
+
+                    document.getElementById('last-update-time').textContent = now.toLocaleTimeString('nl-BE', {hour: '2-digit', minute:'2-digit'});
+                    document.getElementById('connection-status').textContent = "Live verbinding actief";
+                    document.getElementById('status-dot').className = "w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse";
+                })
+                .catch(function(err) {
+                    console.error("Fout bij ophalen gegevens:", err);
+                    document.getElementById('connection-status').textContent = "Offline / Buffermodus";
+                    document.getElementById('status-dot').className = "w-2.5 h-2.5 rounded-full bg-rose-500";
                 });
-
-                container.innerHTML = html;
-
-                document.getElementById('last-update-time').textContent = now.toLocaleTimeString('nl-BE', {hour: '2-digit', minute:'2-digit'});
-                document.getElementById('connection-status').textContent = "Live verbinding actief";
-                document.getElementById('status-dot').className = "w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse";
-
-            } catch (err) {
-                console.error("Fout bij ophalen gegevens:", err);
-                document.getElementById('connection-status').textContent = "Offline / Buffermodus";
-                document.getElementById('status-dot').className = "w-2.5 h-2.5 rounded-full bg-rose-500";
-            }
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', function() {
             updateClock();
             setInterval(updateClock, 1000);
 
