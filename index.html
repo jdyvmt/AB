@@ -4,66 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Afwezige leerkrachten Atheneum Brugge - TV Signage</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@600;800&display=swap" rel="stylesheet">
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-                        mono: ['"JetBrains Mono"', 'monospace'],
-                    },
-                    colors: {
-                        brand: {
-                            teal: '#5eead4',
-                            tealDark: '#0f766e',
-                            navy: '#0f172a',
-                            navyLight: '#1e293b',
-                            accent: '#38bdf8',
-                            coral: '#f43f5e',
-                            amber: '#f59e0b'
-                        }
-                    },
-                    animation: {
-                        'pulse-glow': 'pulseGlow 2.5s infinite ease-in-out',
-                    },
-                    keyframes: {
-                        pulseGlow: {
-                            '0%, 100%': { boxShadow: '0 0 25px rgba(94, 234, 212, 0.25), inset 0 0 15px rgba(94, 234, 212, 0.1)' },
-                            '50%': { boxShadow: '0 0 45px rgba(94, 234, 212, 0.45), inset 0 0 25px rgba(94, 234, 212, 0.25)' },
-                        }
-                    }
-                }
-            }
-        }
-    </script>
     <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
         html, body {
             height: 100vh;
             width: 100vw;
             overflow: hidden;
-        }
-        body {
             background: radial-gradient(circle at 15% 15%, #1e293b 0%, #0f172a 70%, #090d16 100%);
             color: #f8fafc;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             user-select: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 24px;
+            gap: 12px;
         }
         .glass-panel {
             background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
         }
         .glass-panel-active {
             background: linear-gradient(135deg, rgba(15, 118, 110, 0.35) 0%, rgba(30, 41, 59, 0.9) 100%);
             border: 2px solid #5eead4 !important;
+            box-shadow: 0 0 25px rgba(94, 234, 212, 0.3);
         }
         .glass-badge {
             background: rgba(244, 63, 94, 0.15);
@@ -75,40 +51,116 @@
         .text-glow-orange {
             text-shadow: 0 0 16px rgba(244, 63, 94, 0.4);
         }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 24px;
+            flex-shrink: 0;
+        }
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            min-height: 0;
+        }
+        .card-afwezigen {
+            padding: 16px;
+            border-left: 8px solid #f43f5e;
+            flex-shrink: 0;
+        }
+        .rooster-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid rgba(51, 65, 85, 0.5);
+        }
+        .rooster-header {
+            display: grid;
+            grid-template-columns: repeat(12, minmax(0, 1fr));
+            background: rgba(15, 23, 42, 0.9);
+            border-bottom: 1px solid rgba(94, 234, 212, 0.3);
+            padding: 10px 24px;
+            font-size: 12px;
+            font-weight: 800;
+            color: #5eead4;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            flex-shrink: 0;
+        }
+        .rooster-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+        }
+        .rooster-row {
+            display: grid;
+            grid-template-columns: repeat(12, minmax(0, 1fr));
+            padding: 8px 24px;
+            align-items: center;
+            flex: 1;
+            border-bottom: 1px solid rgba(30, 41, 59, 0.6);
+        }
+        .pause-row {
+            display: grid;
+            grid-template-columns: repeat(12, minmax(0, 1fr));
+            background: rgba(3, 7, 18, 0.8);
+            border-top: 1px solid rgba(94, 234, 212, 0.2);
+            border-bottom: 1px solid rgba(94, 234, 212, 0.2);
+            padding: 8px 24px;
+            align-items: center;
+            flex: 1;
+        }
+        footer {
+            padding: 10px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            font-weight: 500;
+            color: #94a3b8;
+            flex-shrink: 0;
+        }
     </style>
 </head>
-<body class="h-screen w-screen flex flex-col justify-between p-4 lg:p-6 font-sans gap-3">
+<body>
 
     <!-- TOP HEADER -->
-    <header class="flex justify-between items-center glass-panel rounded-2xl px-6 py-3 shadow-2xl flex-shrink-0">
-        <div class="flex items-center gap-6">
-            <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-teal-500 to-sky-400 flex items-center justify-center font-extrabold text-xl text-slate-950 shadow-lg shadow-teal-500/20">
+    <header class="glass-panel">
+        <div style="display: flex; align-items: center; gap: 24px;">
+            <div style="width: 48px; height: 48px; border-radius: 12px; background: linear-gradient(to top right, #14b8a6, #38bdf8); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 20px; color: #030712; box-shadow: 0 10px 15px -3px rgba(20, 184, 166, 0.2);">
                 AB
             </div>
-            <div class="text-left border-l border-slate-700/60 pl-6">
-                <div class="text-xs font-bold text-teal-400 tracking-wider uppercase" id="live-dag-label">LADEN...</div>
-                <div class="text-lg lg:text-xl font-bold text-slate-100" id="live-datum-str">Even geduld...</div>
+            <div style="text-align: left; border-left: 1px solid rgba(51, 65, 85, 0.6); padding-left: 24px;">
+                <div style="font-size: 12px; font-weight: 800; color: #2dd4bf; letter-spacing: 0.05em; text-transform: uppercase;" id="live-dag-label">LADEN...</div>
+                <div style="font-size: 18px; font-weight: bold; color: #f1f5f9;" id="live-datum-str">Even geduld...</div>
             </div>
         </div>
-        <div class="flex items-center gap-3">
-            <i class="fa-regular fa-clock text-2xl text-brand-teal"></i>
-            <div class="font-mono text-3xl lg:text-4xl font-extrabold tracking-tight text-white text-glow" id="digital-clock">
-                00:00<span class="text-xl text-teal-400/70" id="digital-clock-seconds">:00</span>
+
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <i class="fa-regular fa-clock" style="font-size: 24px; color: #5eead4;"></i>
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 32px; font-weight: 800; letter-spacing: -0.025em; color: #ffffff;" class="text-glow" id="digital-clock">
+                00:00<span style="font-size: 20px; color: rgba(94, 234, 212, 0.7);" id="digital-clock-seconds">:00</span>
             </div>
         </div>
     </header>
 
     <!-- MIDDLE SECTION -->
-    <main class="flex-1 flex flex-col gap-3 min-h-0">
-        <div class="glass-panel rounded-2xl p-4 border-l-8 border-l-rose-500 shadow-xl relative overflow-hidden flex-shrink-0">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 rounded-xl glass-badge flex items-center justify-center text-rose-400 text-lg font-bold">
+    <main>
+        <!-- Afwezige Leerkrachten Card -->
+        <div class="glass-panel card-afwezigen">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 16px;">
+                    <div style="width: 40px; height: 40px; border-radius: 12px;" class="glass-badge" style="display: flex; align-items: center; justify-content: center; color: #f43f5e; font-size: 18px; font-weight: bold;">
                         <i class="fa-solid fa-user-slash"></i>
                     </div>
                     <div>
-                        <span class="text-[11px] font-extrabold text-rose-400 tracking-wider uppercase block">Afwezige Leerkrachten</span>
-                        <div class="text-xl lg:text-2xl font-bold text-white text-glow-orange mt-0.5" id="afwezigen-tekst">
+                        <span style="font-size: 11px; font-weight: 800; color: #f43f5e; letter-spacing: 0.05em; text-transform: uppercase; display: block;">Afwezige Leerkrachten</span>
+                        <div style="font-size: 20px; font-weight: bold; color: #ffffff; margin-top: 2px;" class="text-glow-orange" id="afwezigen-tekst">
                             Laden van gegevens...
                         </div>
                     </div>
@@ -116,34 +168,37 @@
             </div>
         </div>
 
-        <div class="glass-panel rounded-2xl flex-1 flex flex-col overflow-hidden border border-slate-700/50 shadow-2xl min-h-0">
-            <div class="grid grid-cols-12 bg-slate-900/90 border-b border-teal-500/30 px-6 py-2.5 text-xs font-extrabold text-brand-teal uppercase tracking-wider flex-shrink-0">
-                <div class="col-span-2 flex items-center gap-2">
+        <!-- Timetable Table Container -->
+        <div class="glass-panel rooster-wrapper">
+            <div class="rooster-header">
+                <div style="grid-column: span 2; display: flex; align-items: center; gap: 8px;">
                     <i class="fa-solid fa-hourglass-half"></i> Lesuur
                 </div>
-                <div class="col-span-10 flex items-center gap-2">
+                <div style="grid-column: span 10; display: flex; align-items: center; gap: 8px;">
                     <i class="fa-solid fa-graduation-cap"></i> Klassen
                 </div>
             </div>
-            <div class="flex-1 flex flex-col justify-between divide-y divide-slate-800/60 overflow-hidden" id="rooster-container">
+
+            <div class="rooster-body" id="rooster-container">
+                <!-- Dynamisch gevuld via JS -->
             </div>
         </div>
     </main>
 
     <!-- FOOTER -->
-    <footer class="glass-panel rounded-2xl px-6 py-2.5 flex justify-between items-center text-xs font-medium text-slate-400 flex-shrink-0">
-        <div class="flex items-center gap-6">
-            <div class="flex items-center gap-2">
-                <span id="status-dot" class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span class="text-slate-200 font-semibold" id="connection-status">Live verbinding actief</span>
+    <footer class="glass-panel">
+        <div style="display: flex; align-items: center; gap: 24px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span id="status-dot" style="width: 10px; height: 10px; border-radius: 50%; background-color: #34d399;"></span>
+                <span style="color: #e2e8f0; font-weight: 600;" id="connection-status">Live verbinding actief</span>
             </div>
-            <div class="h-4 w-px bg-slate-700"></div>
-            <div class="flex items-center gap-2">
-                <i class="fa-solid fa-arrows-rotate text-teal-400"></i>
-                <span>Laatste update: <strong class="text-white font-mono" id="last-update-time">--:--</strong></span>
+            <div style="height: 16px; width: 1px; background-color: #334155;"></div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <i class="fa-solid fa-arrows-rotate" style="color: #2dd4bf;"></i>
+                <span>Laatste update: <strong style="color: #ffffff; font-family: monospace;" id="last-update-time">--:--</strong></span>
             </div>
         </div>
-        <div class="font-semibold text-slate-300">Atheneum Brugge</div>
+        <div style="font-weight: 600; color: #cbd5e1;">Atheneum Brugge</div>
     </footer>
 
     <!-- JAVASCRIPT LOGIC -->
@@ -257,9 +312,6 @@
                     var rawAfwezigen = (rows[3] && rows[3][1]) ? rows[3][1].replace(/"/g, '').trim() : '';
                     var afwezigenEl = document.getElementById('afwezigen-tekst');
                     
-                    afwezigenEl.classList.remove('text-emerald-400');
-                    afwezigenEl.classList.add('text-white');
-
                     if (rawAfwezigen && rawAfwezigen !== "") {
                         afwezigenEl.textContent = rawAfwezigen;
                     } else {
@@ -276,12 +328,11 @@
                     defaultSchedule.forEach(function(item) {
                         if (item.isPause) {
                             html += 
-                                '<div class="grid grid-cols-12 bg-slate-950/80 border-y border-teal-500/20 px-6 py-2 items-center flex-1">' +
-                                    '<div class="col-span-2 font-extrabold text-amber-400 text-xs lg:text-sm tracking-wider flex items-center gap-2">' +
+                                '<div class="pause-row">' +
+                                    '<div style="grid-column: span 2; font-weight: 800; color: #fbbf24; font-size: 13px; display: flex; align-items: center; gap: 8px;">' +
                                         '<i class="fa-solid fa-utensils"></i> MIDDAGPAUZE' +
                                     '</div>' +
-                                    '<div class="col-span-10 text-xs font-bold text-slate-400 uppercase tracking-widest">' +
-                                    '</div>' +
+                                    '<div style="grid-column: span 10;"></div>' +
                                 '</div>';
                             return;
                         }
@@ -293,24 +344,24 @@
 
                         var isActive = isSheetToday && (currentMinutes >= item.startMin && currentMinutes < item.endMin);
 
-                        var fontSizeClass = "text-lg lg:text-xl";
-                        if (klassenTekst.length > 90) fontSizeClass = "text-xs lg:text-sm";
-                        else if (klassenTekst.length > 50) fontSizeClass = "text-sm lg:text-base";
+                        var fontSize = "18px";
+                        if (klassenTekst.length > 90) fontSize = "13px";
+                        else if (klassenTekst.length > 50) fontSize = "15px";
 
-                        var rowClass = isActive 
-                            ? 'glass-panel-active animate-pulse-glow relative z-10 rounded-xl my-0.5' 
-                            : 'hover:bg-slate-800/40 transition-colors';
+                        var rowStyle = isActive 
+                            ? 'background: linear-gradient(135deg, rgba(15, 118, 110, 0.35) 0%, rgba(30, 41, 59, 0.9) 100%); border: 2px solid #5eead4; border-radius: 12px; margin: 2px 0; z-index: 10;' 
+                            : '';
 
                         html += 
-                            '<div class="grid grid-cols-12 px-6 py-2 items-center flex-1 ' + rowClass + '">' +
-                                '<div class="col-span-2 flex items-center gap-3">' +
-                                    '<span class="w-7 h-7 lg:w-8 lg:h-8 rounded-lg ' + (isActive ? 'bg-teal-400 text-slate-950 font-black' : 'bg-slate-800 text-teal-400 font-bold') + ' flex items-center justify-center text-xs lg:text-sm shadow">' +
+                            '<div class="rooster-row" style="' + rowStyle + '">' +
+                                '<div style="grid-column: span 2; display: flex; align-items: center; gap: 12px;">' +
+                                    '<span style="width: 30px; height: 30px; border-radius: 8px; ' + (isActive ? 'background: #5eead4; color: #030712; font-weight: 900;' : 'background: #1e293b; color: #5eead4; font-weight: bold;') + ' display: flex; align-items: center; justify-content: center; font-size: 13px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);">' +
                                         item.hour +
                                     '</span>' +
-                                    '<span class="font-extrabold text-white text-sm lg:text-base whitespace-nowrap">' + hourTimeFromSheet + '</span>' +
+                                    '<span style="font-weight: 800; color: #ffffff; font-size: 15px; white-space: nowrap;">' + hourTimeFromSheet + '</span>' +
                                 '</div>' +
-                                '<div class="col-span-10 font-bold text-white tracking-wide ' + fontSizeClass + '">' +
-                                    (klassenTekst !== '-' ? klassenTekst : '<span class="text-slate-600 font-normal italic">Geen vervangingen / studie gemeld</span>') +
+                                '<div style="grid-column: span 10; font-weight: bold; color: #ffffff; font-size: ' + fontSize + '; letter-spacing: 0.025em;">' +
+                                    (klassenTekst !== '-' ? klassenTekst : '<span style="color: #475569; font-weight: normal; font-style: italic;">Geen vervangingen / studie gemeld</span>') +
                                 '</div>' +
                             '</div>';
                     });
@@ -319,12 +370,12 @@
 
                     document.getElementById('last-update-time').textContent = now.toLocaleTimeString('nl-BE', {hour: '2-digit', minute:'2-digit'});
                     document.getElementById('connection-status').textContent = "Live verbinding actief";
-                    document.getElementById('status-dot').className = "w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse";
+                    document.getElementById('status-dot').style.backgroundColor = "#34d399";
                 })
                 .catch(function(err) {
                     console.error("Fout bij ophalen gegevens:", err);
                     document.getElementById('connection-status').textContent = "Offline / Buffermodus";
-                    document.getElementById('status-dot').className = "w-2.5 h-2.5 rounded-full bg-rose-500";
+                    document.getElementById('status-dot').style.backgroundColor = "#f43f5e";
                 });
         }
 
