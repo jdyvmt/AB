@@ -6,55 +6,55 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
-<body style="margin:0; padding:20px; width:100vw; height:100vh; background:#0f172a; background-image:radial-gradient(circle at 15% 15%, #1e293b 0%, #0f172a 70%, #090d16 100%); color:#f8fafc; font-family:'Plus Jakarta Sans', sans-serif; box-sizing:border-box; display:flex; flex-direction:column; overflow:hidden;">
+<body style="margin:0; padding:24px; width:100vw; height:100vh; background:#0f172a; background-image:radial-gradient(circle at 15% 15%, #1e293b 0%, #0f172a 70%, #090d16 100%); color:#f8fafc; font-family:'Plus Jakarta Sans', sans-serif; box-sizing:border-box; display:flex; flex-direction:column; overflow:hidden;">
 
     <!-- TOP HEADER -->
-    <div style="background:rgba(30,41,59,0.85); border:1px solid rgba(255,255,255,0.12); border-radius:16px; padding:14px 24px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
+    <div style="background:rgba(30,41,59,0.85); border:1px solid rgba(255,255,255,0.12); border-radius:18px; padding:20px 28px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center;">
         <div style="display:flex; align-items:center;">
-            <div style="width:48px; height:48px; border-radius:12px; background:#14b8a6; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:20px; color:#030712; margin-right:20px;">AB</div>
-            <div style="border-left:1px solid rgba(255,255,255,0.15); padding-left:20px;">
-                <div style="font-size:12px; font-weight:800; color:#2dd4bf; text-transform:uppercase;" id="live-dag-label">LADEN...</div>
-                <div style="font-size:20px; font-weight:700; color:#f1f5f9;" id="live-datum-str">Even geduld...</div>
+            <div style="width:60px; height:60px; border-radius:14px; background:#14b8a6; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:26px; color:#030712; margin-right:24px;">AB</div>
+            <div style="border-left:1px solid rgba(255,255,255,0.2); padding-left:24px;">
+                <div style="font-size:14px; font-weight:800; color:#2dd4bf; text-transform:uppercase; letter-spacing:1px;" id="live-dag-label">LADEN...</div>
+                <div style="font-size:26px; font-weight:700; color:#f1f5f9; margin-top:2px;" id="live-datum-str">Even geduld...</div>
             </div>
         </div>
         <div style="display:flex; align-items:center;">
-            <i class="fa-regular fa-clock" style="font-size:24px; color:#5eead4; margin-right:12px;"></i>
-            <div style="font-family:'JetBrains Mono', monospace; font-size:32px; font-weight:800; color:#ffffff;" id="digital-clock">
-                00:00<span style="font-size:20px; color:#5eead4;" id="digital-clock-seconds">:00</span>
+            <i class="fa-regular fa-clock" style="font-size:32px; color:#5eead4; margin-right:16px;"></i>
+            <div style="font-family:'JetBrains Mono', monospace; font-size:44px; font-weight:800; color:#ffffff;" id="digital-clock">
+                00:00<span style="font-size:26px; color:#5eead4;" id="digital-clock-seconds">:00</span>
             </div>
         </div>
     </div>
 
     <!-- MIDDLE SECTION -->
-    <div style="flex:1; display:flex; flex-direction:column; margin-bottom:12px; min-height:0;">
+    <div style="flex:1; display:flex; flex-direction:column; margin-bottom:16px; min-height:0; gap:16px;">
         <!-- Afwezigen Card -->
-        <div style="background:rgba(30,41,59,0.85); border:1px solid rgba(255,255,255,0.12); border-left:8px solid #f43f5e; border-radius:16px; padding:16px 24px; margin-bottom:12px;">
+        <div style="background:rgba(30,41,59,0.85); border:1px solid rgba(255,255,255,0.12); border-left:10px solid #f43f5e; border-radius:18px; padding:22px 28px;">
             <div style="display:flex; align-items:center;">
-                <div style="width:42px; height:42px; border-radius:10px; background:rgba(244,63,94,0.2); display:flex; align-items:center; justify-content:center; color:#f43f5e; font-size:18px; margin-right:16px;">
+                <div style="width:52px; height:52px; border-radius:12px; background:rgba(244,63,94,0.2); display:flex; align-items:center; justify-content:center; color:#f43f5e; font-size:22px; margin-right:20px;">
                     <i class="fa-solid fa-user-slash"></i>
                 </div>
                 <div>
-                    <span style="font-size:11px; font-weight:800; color:#f43f5e; text-transform:uppercase; display:block;">Afwezige Leerkrachten</span>
-                    <div style="font-size:22px; font-weight:700; color:#ffffff; margin-top:2px;" id="afwezigen-tekst">Laden van gegevens...</div>
+                    <span style="font-size:13px; font-weight:800; color:#f43f5e; text-transform:uppercase; letter-spacing:1px; display:block;">Afwezige Leerkrachten</span>
+                    <div style="font-size:28px; font-weight:700; color:#ffffff; margin-top:4px;" id="afwezigen-tekst">Laden van gegevens...</div>
                 </div>
             </div>
         </div>
 
         <!-- Rooster Container -->
-        <div style="background:rgba(30,41,59,0.85); border:1px solid rgba(255,255,255,0.12); border-radius:16px; flex:1; display:flex; flex-direction:column; overflow:hidden;">
-            <div style="background:#0f172a; border-bottom:1px solid rgba(94,234,212,0.3); padding:10px 24px; font-size:13px; font-weight:800; color:#5eead4; text-transform:uppercase; display:flex;">
-                <div style="width:22%;"><i class="fa-solid fa-hourglass-half" style="margin-right:8px;"></i> Lesuur</div>
-                <div style="width:78%;"><i class="fa-solid fa-graduation-cap" style="margin-right:8px;"></i> Klassen</div>
+        <div style="background:rgba(30,41,59,0.85); border:1px solid rgba(255,255,255,0.12); border-radius:18px; flex:1; display:flex; flex-direction:column; overflow:hidden;">
+            <div style="background:#0f172a; border-bottom:2px solid rgba(94,234,212,0.3); padding:14px 28px; font-size:15px; font-weight:800; color:#5eead4; text-transform:uppercase; letter-spacing:1px; display:flex;">
+                <div style="width:22%;"><i class="fa-solid fa-hourglass-half" style="margin-right:10px;"></i> Lesuur</div>
+                <div style="width:78%;"><i class="fa-solid fa-graduation-cap" style="margin-right:10px;"></i> Klassen</div>
             </div>
             <div id="rooster-container" style="flex:1; display:flex; flex-direction:column;"></div>
         </div>
     </div>
 
     <!-- FOOTER -->
-    <div style="background:rgba(30,41,59,0.85); border:1px solid rgba(255,255,255,0.12); border-radius:16px; padding:10px 24px; display:flex; justify-content:space-between; align-items:center; font-size:13px; color:#94a3b8;">
+    <div style="background:rgba(30,41,59,0.85); border:1px solid rgba(255,255,255,0.12); border-radius:18px; padding:14px 28px; display:flex; justify-content:space-between; align-items:center; font-size:15px; color:#94a3b8;">
         <div style="display:flex; align-items:center;">
-            <span id="status-dot" style="width:10px; height:10px; border-radius:50%; background:#34d399; display:inline-block; margin-right:8px;"></span>
-            <span style="color:#e2e8f0; font-weight:600; margin-right:20px;" id="connection-status">Live verbinding actief</span>
+            <span id="status-dot" style="width:12px; height:12px; border-radius:50%; background:#34d399; display:inline-block; margin-right:10px;"></span>
+            <span style="color:#e2e8f0; font-weight:600; margin-right:24px;" id="connection-status">Live verbinding actief</span>
             <span>Laatste update: <strong style="color:#ffffff;" id="last-update-time">--:--</strong></span>
         </div>
         <div style="font-weight:600; color:#cbd5e1;">Atheneum Brugge</div>
@@ -145,8 +145,8 @@
                     var html = '';
                     defaultSchedule.forEach(function(item) {
                         if (item.isPause) {
-                            html += '<div style="display:flex; align-items:center; background:rgba(3,7,18,0.7); padding:0 24px; flex:0.7; color:#fbbf24; font-weight:800; font-size:13px; border-bottom:1px solid rgba(255,255,255,0.06);">' +
-                                        '<div style="width:22%;"><i class="fa-solid fa-utensils" style="margin-right:8px;"></i> MIDDAGPAUZE</div>' +
+                            html += '<div style="display:flex; align-items:center; background:rgba(3,7,18,0.7); padding:0 28px; flex:0.7; color:#fbbf24; font-weight:800; font-size:15px; border-bottom:1px solid rgba(255,255,255,0.06);">' +
+                                        '<div style="width:22%;"><i class="fa-solid fa-utensils" style="margin-right:10px;"></i> MIDDAGPAUZE</div>' +
                                         '<div style="width:78%;"></div>' +
                                     '</div>';
                             return;
@@ -156,14 +156,14 @@
                         var klassenTekst = sheetRow[1] ? sheetRow[1].replace(/"/g, '').trim() : '-';
                         var isActive = isSheetToday && (currentMinutes >= item.startMin && currentMinutes < item.endMin);
 
-                        var fontSize = klassenTekst.length > 90 ? "14px" : (klassenTekst.length > 50 ? "16px" : "19px");
-                        var rowStyle = isActive ? 'background:rgba(15,118,110,0.45); border:2px solid #5eead4; border-radius:10px;' : '';
+                        var fontSize = klassenTekst.length > 90 ? "17px" : (klassenTekst.length > 50 ? "20px" : "24px");
+                        var rowStyle = isActive ? 'background:rgba(15,118,110,0.45); border:2px solid #5eead4; border-radius:12px;' : '';
                         var badgeStyle = isActive ? 'background:#5eead4; color:#030712;' : 'background:#0f172a; color:#5eead4;';
 
-                        html += '<div style="display:flex; align-items:center; padding:0 24px; flex:1; border-bottom:1px solid rgba(255,255,255,0.06); ' + rowStyle + '">' +
+                        html += '<div style="display:flex; align-items:center; padding:0 28px; flex:1; border-bottom:1px solid rgba(255,255,255,0.06); ' + rowStyle + '">' +
                                     '<div style="width:22%; display:flex; align-items:center;">' +
-                                        '<span style="width:28px; height:28px; border-radius:6px; ' + badgeStyle + ' display:inline-flex; align-items:center; justify-content:center; font-weight:800; font-size:13px; margin-right:12px;">' + item.hour + '</span>' +
-                                        '<span style="font-weight:800; color:#fff; font-size:15px;">' + uurTekst + '</span>' +
+                                        '<span style="width:36px; height:36px; border-radius:8px; ' + badgeStyle + ' display:inline-flex; align-items:center; justify-content:center; font-weight:800; font-size:16px; margin-right:16px;">' + item.hour + '</span>' +
+                                        '<span style="font-weight:800; color:#fff; font-size:18px;">' + uurTekst + '</span>' +
                                     '</div>' +
                                     '<div style="width:78%; font-weight:700; font-size:' + fontSize + '; color:#ffffff;">' +
                                         (klassenTekst !== '-' ? klassenTekst : '<span style="color:#64748b; font-weight:400; font-style:italic;">Geen vervangingen / studie gemeld</span>') +
@@ -172,7 +172,7 @@
                     });
 
                     document.getElementById('rooster-container').innerHTML = html;
-                    document.getElementById('last-update-time').textContent = ('0' + now.Hours ? '' : ('0' + now.getHours()).slice(-2)) + ':' + ('0' + now.getMinutes()).slice(-2);
+                    document.getElementById('last-update-time').textContent = ('0' + now.getHours()).slice(-2) + ':' + ('0' + now.getMinutes()).slice(-2);
                     document.getElementById('connection-status').textContent = "Live verbinding actief";
                     document.getElementById('status-dot').style.background = "#34d399";
                 })
