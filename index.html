@@ -254,7 +254,7 @@
                     rows = rawData.split(/\r?\n/).map(row => splitCSVLine(row));
                 }
 
-                const rawDatum = rows[1]?.[1];
+                const rawDatum = (rows[1] && rows[1][1]) ? rows[1][1] : null;
                 const parsedDate = parseSheetDate(rawDatum);
                 const now = new Date();
 
@@ -267,7 +267,8 @@
                     document.getElementById('live-dag-label').textContent = "ONBEKEND";
                 }
 
-                const rawAfwezigen = rows[3]?.[1]?.replace(/"/g, '').trim();
+                const afwezigenRow = (rows[3] && rows[3][1]) ? rows[3][1] : '';
+                const rawAfwezigen = afwezigenRow.replace(/"/g, '').trim();
                 const afwezigenEl = document.getElementById('afwezigen-tekst');
                 
                 afwezigenEl.classList.remove('text-emerald-400');
@@ -301,8 +302,9 @@
                     }
 
                     const sheetRowIndex = 5 + item.hour;
-                    let hourTimeFromSheet = rows[sheetRowIndex]?.[0]?.replace(/"/g, '').trim() || item.label;
-                    let klassenTekst = rows[sheetRowIndex]?.[1]?.replace(/"/g, '').trim() || '-';
+                    const sheetRow = rows[sheetRowIndex] || [];
+                    let hourTimeFromSheet = sheetRow[0] ? sheetRow[0].replace(/"/g, '').trim() : item.label;
+                    let klassenTekst = sheetRow[1] ? sheetRow[1].replace(/"/g, '').trim() : '-';
 
                     let isActive = isSheetToday && (currentMinutes >= item.startMin && currentMinutes < item.endMin);
 
