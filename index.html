@@ -87,18 +87,30 @@
             return result;
         }
 
-        function parseSheetDate(dateStr) {
-            if (!dateStr) return null;
-            var cleanStr = dateStr.replace(/"/g, '').trim();
-            var parts = cleanStr.split(/[-/]/);
-            var dateObj = null;
-            if (parts.length === 3) {
-                if (parts[0].length <= 2 && parts[2].length === 4) dateObj = new Date(parts[2], parts[1] - 1, parts[0]);
-                else if (parts[0].length === 4) dateObj = new Date(parts[0], parts[1] - 1, parts[2]);
-            }
-            if (!dateObj || isNaN(dateObj.getTime())) dateObj = new Date(Date.parse(cleanStr));
-            return (dateObj && !isNaN(dateObj.getTime())) ? dateObj : null;
+       function parseSheetDate(dateStr) {
+    if (!dateStr) return null;
+    var cleanStr = dateStr.replace(/"/g, '').trim();
+    var parts = cleanStr.split(/[-/]/);
+    var dateObj = null;
+
+    if (parts.length === 3) {
+        // Europees formaat: DD/MM/YYYY of DD/MM/YY
+        if (parts[0].length <= 2) {
+            var year = parseInt(parts[2], 10);
+            if (year < 100) year += 2000; // Maakt van '26' netjes '2026'
+            dateObj = new Date(year, parseInt(parts[1], 10) - 1, parseInt(parts[0], 10));
+        } 
+        // ISO formaat: YYYY-MM-DD
+        else if (parts[0].length === 4) {
+            dateObj = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
         }
+    }
+
+    if (!dateObj || isNaN(dateObj.getTime())) {
+        dateObj = new Date(Date.parse(cleanStr));
+    }
+    return (dateObj && !isNaN(dateObj.getTime())) ? dateObj : null;
+}
 
         function calculateRelativeDateLabel(targetDate) {
             if (!targetDate) return "DATUM";
